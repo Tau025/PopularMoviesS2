@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Pop Movies S2</string>
+    <string name="title_movie_detail">Movie Detail</string>
+    <string name="movie_thumb">Movie thumb</string>
+
+    <string name="no_API_key">This app needs API-key.\nPlease paste it to Constants.API_KEY_VALUE</string>
+    <string name="API_key_length_is_bad">API-key found, but it seems to be too short or too long.\nValid API-key should be 32 chars long.</string>
+    <string name="also">\n\nalso\n\n</string>
+    <string name="no_internet">Check internet connection.</string>
+
+    <string name="sort_order_most_popular">Most popular</string>
+    <string name="sort_order_top_rated">Top rated</string>
+    <string name="sort_order_most_popular_key">popular</string>
+    <string name="sort_order_top_rated_key">top_rated</string>
+
+    <string name="title_activity_movie_details">Movie details</string>
+</resources>
