@@ -5,10 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
-
 import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.util.Logger;
+import com.devtau.popularmoviess2.utility.Logger;
 /**
  * An activity representing a single Movie detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -16,7 +15,6 @@ import com.devtau.popularmoviess2.util.Logger;
  * in a {@link MainActivity}.
  */
 public class MovieDetailsActivity extends AppCompatActivity {
-
     private static final String LOG_TAG = MovieDetailsActivity.class.getSimpleName();
 
     @Override

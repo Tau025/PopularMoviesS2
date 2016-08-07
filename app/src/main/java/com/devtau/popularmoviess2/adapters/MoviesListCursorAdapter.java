@@ -8,14 +8,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
-import com.devtau.popularmoviess2.util.Util;
+import com.devtau.popularmoviess2.utility.Utility;
 
 public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesListCursorAdapter.ViewHolder>
         implements View.OnClickListener {
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener listener;
+    private int imageWidth, imageHeight;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public MoviesListCursorAdapter(OnItemClickListener listener, int imageWidth, int imageHeight) {
+        this.listener = listener;
+        this.imageWidth = imageWidth;
+        this.imageHeight = imageHeight;
     }
 
     @Override
@@ -28,17 +31,18 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
 
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
-        holder.bindData(cursor);
+        String posterPath = cursor.getString(cursor.getColumnIndex(MoviesTable.POSTER_PATH));
+        Utility.loadImageToView(holder.view.getContext(), posterPath, holder.movieThumb, imageWidth, imageHeight);
     }
 
     @Override
     public void onClick(View view) {
-        if (onItemClickListener != null) {
+        if (listener != null) {
             RecyclerView recyclerView = (RecyclerView) view.getParent();
             int position = recyclerView.getChildLayoutPosition(view);
             if (position != RecyclerView.NO_POSITION) {
                 Cursor cursor = getItem(position);
-                onItemClickListener.onItemClicked(cursor);
+                listener.onItemClicked(cursor);
             }
         }
     }
@@ -53,11 +57,6 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
             super(view);
             this.view = view;
             movieThumb = (ImageView) view.findViewById(R.id.movie_thumb);
-        }
-
-        public void bindData(Cursor cursor) {
-            String posterPath = cursor.getString(cursor.getColumnIndex(MoviesTable.POSTER_PATH));
-            Util.loadImageToView(view.getContext(), posterPath, movieThumb, 0, 0);
         }
     }
 

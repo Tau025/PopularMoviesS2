@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import com.devtau.popularmoviess2.util.Logger;
+import com.devtau.popularmoviess2.utility.Logger;
 /**
  * Helper is one no matter how much tables there are
  */
@@ -17,6 +17,7 @@ public class MySQLHelper extends SQLiteOpenHelper {
     public static final String CREATE_TABLE = "CREATE TABLE %s (%s);";
     public static final String PRIMARY_KEY = BaseColumns._ID + " integer primary key autoincrement, ";
 
+//    see also strings.content_authority
     public static final String CONTENT_AUTHORITY = "com.devtau.popularmoviess2";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 

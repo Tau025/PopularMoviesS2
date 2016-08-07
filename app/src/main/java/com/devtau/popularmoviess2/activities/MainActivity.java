@@ -1,6 +1,5 @@
 package com.devtau.popularmoviess2.activities;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -12,13 +11,17 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import com.devtau.popularmoviess2.adapters.MoviesListCursorAdapter;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.model.Movie;
-import com.devtau.popularmoviess2.util.Logger;
-import java.util.GregorianCalendar;
+import com.devtau.popularmoviess2.model.SortBy;
+import com.devtau.popularmoviess2.sync.SyncAdapter;
+import com.devtau.popularmoviess2.utility.Constants;
+import com.devtau.popularmoviess2.utility.Logger;
 /**
  * An activity representing a list of Movies. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -29,11 +32,15 @@ import java.util.GregorianCalendar;
  */
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        MoviesListCursorAdapter.OnItemClickListener {
+        MoviesListCursorAdapter.OnItemClickListener,
+        SyncAdapter.SyncAdapterListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean mTwoPane;
     private static final int LOADER_RESULTS = 115297;
-    private MoviesListCursorAdapter adapter;
+    private MoviesListCursorAdapter rvAdapter;
+    private SortBy sortBy = Constants.DEFAULT_SORT_BY;
+    private int imageWidth, imageHeight;
+    private int columnCount = 2;
 
 
     @Override
@@ -41,65 +48,54 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int count = getMoviesCountViaCR();
-        if(count == 0) {
-            populateDBViaCR();
-            count = getMoviesCountViaCR();
-            Logger.d(LOG_TAG, "inserted " + String.valueOf(count) + " mock movies");
-        }
+        calculateParamsOfThumb();
 
-        adapter = new MoviesListCursorAdapter();
-        adapter.setOnItemClickListener(this);
+        rvAdapter = new MoviesListCursorAdapter(this, imageWidth, imageHeight);
         getSupportLoaderManager().restartLoader(LOADER_RESULTS, null, this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(rvAdapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, columnCount));
 
         if (findViewById(R.id.movie_details_container) != null) {
             mTwoPane = true;
         }
+        SyncAdapter.initializeSyncAdapter(this);
     }
 
-    private int getMoviesCountViaCR() {
-        Cursor cursor = getContentResolver().query(MoviesTable.CONTENT_URI, null, null, null, null);
-        DatabaseUtils.dumpCursor(cursor);
-        int count = 0;
-        if(cursor != null) {
-            count = cursor.getCount();
-            cursor.close();
+    private void calculateParamsOfThumb() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        imageWidth = metrics.widthPixels / columnCount;
+        imageHeight = Math.round(((float) imageWidth /
+                Constants.DEFAULT_POSTER_WIDTH) * Constants.DEFAULT_POSTER_HEIGHT);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_order_toggle:
+                sortBy = SortBy.toggle(sortBy);
+                item.setTitle(sortBy.getDescription(this));
+                SyncAdapter.syncImmediately(this);
+                getSupportLoaderManager().restartLoader(LOADER_RESULTS, null, this);
+                return true;
         }
-        return count;
+        return super.onOptionsItemSelected(item);
     }
-
-    private void populateDBViaCR() {
-        ContentResolver resolver = getContentResolver();
-
-        insertToDB(resolver, new Movie(1, "title1", "posterPath1", "plotSynopsis1", 8.9,
-                        new GregorianCalendar(2016, 5, 26, 14, 0)));
-        insertToDB(resolver, new Movie(2, "title2", "posterPath2", "plotSynopsis2", 7.9,
-                        new GregorianCalendar(2016, 5, 27, 10, 10)));
-        insertToDB(resolver, new Movie(3, "title3", "posterPath3", "plotSynopsis3", 5.9,
-                        new GregorianCalendar(2016, 5, 28, 8, 40)));
-        insertToDB(resolver, new Movie(4, "title4", "posterPath4", "plotSynopsis4", 3.9,
-                        new GregorianCalendar(2016, 6, 1, 10, 0)));
-        insertToDB(resolver, new Movie(5, "title5", "posterPath5", "plotSynopsis5", 7.9,
-                        new GregorianCalendar(2016, 6, 3, 12, 30)));
-        insertToDB(resolver, new Movie(6, "title6", "posterPath6", "plotSynopsis6", 9.9,
-                        new GregorianCalendar(2016, 6, 5, 9, 20)));
-    }
-
-    private void insertToDB(ContentResolver resolver, Movie movie) {
-        resolver.insert(MoviesTable.CONTENT_URI, MoviesTable.getContentValues(movie));
-    }
-
-
-
 
     @Override
     public void onItemClicked(Cursor cursor) {
         long movieId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
         Logger.v(LOG_TAG, "mTwoPane: " + String.valueOf(mTwoPane));
+        DatabaseUtils.dumpCursor(cursor);
         if (mTwoPane) {
             Bundle arguments = new Bundle();
             arguments.putLong(MovieDetailsFragment.MOVIE_ID_EXTRA, movieId);
@@ -121,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_RESULTS:
-                return new CursorLoader(this, MoviesTable.CONTENT_URI, null, null, null, null);
+                String sortOrder = sortBy.getDatabaseID() + " DESC";
+                return new CursorLoader(this, MoviesTable.CONTENT_URI, null, null, null, sortOrder);
         }
         return null;
     }
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_RESULTS:
-                this.adapter.swapCursor(data);
+                this.rvAdapter.swapCursor(data);
                 break;
         }
     }
@@ -139,8 +136,14 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         switch (loader.getId()) {
             case LOADER_RESULTS:
-                this.adapter.swapCursor(null);
+                this.rvAdapter.swapCursor(null);
                 break;
         }
+    }
+
+    //SyncAdapterListener
+    @Override
+    public SortBy getSortBy() {
+        return sortBy;
     }
 }

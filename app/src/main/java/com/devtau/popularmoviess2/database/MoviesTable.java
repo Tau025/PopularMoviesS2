@@ -6,8 +6,8 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import com.devtau.popularmoviess2.model.Movie;
-import com.devtau.popularmoviess2.util.Logger;
-import com.devtau.popularmoviess2.util.Util;
+import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.utility.Utility;
 
 public abstract class MoviesTable {
     public static final String TABLE_NAME = "Movies";
@@ -16,6 +16,7 @@ public abstract class MoviesTable {
     public static final String POSTER_PATH = "posterPath";
     public static final String PLOT_SYNOPSIS = "plotSynopsis";
     public static final String USER_RATING = "userRating";
+    public static final String POPULARITY = "popularity";
     public static final String RELEASE_DATE = "releaseDate";
 
     public static final String FIELDS = MySQLHelper.PRIMARY_KEY
@@ -23,6 +24,7 @@ public abstract class MoviesTable {
             + POSTER_PATH + " TEXT, "
             + PLOT_SYNOPSIS + " TEXT, "
             + USER_RATING + " REAL, "
+            + POPULARITY + " REAL, "
             + RELEASE_DATE + " TEXT";
 
     public static final Uri CONTENT_URI =
@@ -39,7 +41,6 @@ public abstract class MoviesTable {
     }
 
     public static String getOrderIdFromUri(Uri uri) {
-        Logger.v(LOG_TAG, "getOrderIdFromUri(). segment 1: " + String.valueOf(uri.getPathSegments().get(1)));
         return uri.getPathSegments().get(1);
     }
 
@@ -52,7 +53,8 @@ public abstract class MoviesTable {
         cv.put(POSTER_PATH, item.getPosterPath());
         cv.put(PLOT_SYNOPSIS, item.getPlotSynopsis());
         cv.put(USER_RATING, item.getUserRating());
-        cv.put(RELEASE_DATE, Util.dateFormat.format(item.getReleaseDate().getTime()));
+        cv.put(POPULARITY, item.getPopularity());
+        cv.put(RELEASE_DATE, Utility.dateFormat.format(item.getReleaseDate().getTime()));
         return cv;
     }
 }

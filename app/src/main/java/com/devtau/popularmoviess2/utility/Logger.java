@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.util;
+package com.devtau.popularmoviess2.utility;
 
 import android.util.Log;
 

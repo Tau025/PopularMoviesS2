@@ -14,4 +14,9 @@
     <string name="sort_order_top_rated_key">top_rated</string>
 
     <string name="title_activity_movie_details">Movie details</string>
+
+    <string name="sync_account_type">popularmoviess2.devtau.com</string>
+    <!--see also MySQLHelper.CONTENT_AUTHORITY-->
+    <string name="content_authority">com.devtau.popularmoviess2</string>
+
 </resources>

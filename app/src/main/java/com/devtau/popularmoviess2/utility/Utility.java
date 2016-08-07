@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.util;
+package com.devtau.popularmoviess2.utility;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -8,8 +8,8 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public abstract class Util {
-    private static final String LOG_TAG = Util.class.getSimpleName();
+public abstract class Utility {
+    private static final String LOG_TAG = Utility.class.getSimpleName();
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public static final SimpleDateFormat theMovieDBDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 

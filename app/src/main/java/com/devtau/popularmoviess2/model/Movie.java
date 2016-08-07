@@ -3,9 +3,9 @@ package com.devtau.popularmoviess2.model;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.widget.ImageView;
-import com.devtau.popularmoviess2.util.Constants;
-import com.devtau.popularmoviess2.util.Logger;
-import com.devtau.popularmoviess2.util.Util;
+import com.devtau.popularmoviess2.utility.Constants;
+import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.utility.Utility;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -19,15 +19,18 @@ public class Movie {
     private String posterPath;
     private String plotSynopsis;
     private double userRating;
+    private double popularity;
     private Calendar releaseDate = new GregorianCalendar(1970, 0, 1);
 
 
-    public Movie(long id, String title, String posterPath, String plotSynopsis, double userRating, Calendar releaseDate) {
+    public Movie(long id, String title, String posterPath, String plotSynopsis,
+                 double userRating, double popularity, Calendar releaseDate) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
         this.plotSynopsis = plotSynopsis;
         this.userRating = userRating;
+        this.popularity = popularity;
         this.releaseDate = releaseDate;
     }
 
@@ -40,7 +43,7 @@ public class Movie {
         try {
             releaseDate = new GregorianCalendar(1970, 0, 1);
             String dateString = cursor.getString(cursor.getColumnIndex(RELEASE_DATE));
-            releaseDate.setTime(Util.dateFormat.parse(dateString));
+            releaseDate.setTime(Utility.dateFormat.parse(dateString));
         } catch (ParseException e) {
             Logger.e(LOG_TAG, "while parsing releaseDate from Cursor", e);
             e.printStackTrace();
@@ -69,6 +72,10 @@ public class Movie {
         return userRating;
     }
 
+    public double getPopularity() {
+        return popularity;
+    }
+
     public Calendar getReleaseDate() {
         return releaseDate;
     }
@@ -82,13 +89,46 @@ public class Movie {
         }
     }
 
+    public void updateFields(Movie movie) {
+        if(movie != null) {
+            int fieldsUpdated = 0;
+            if(!"".equals(movie.getTitle())) {
+                title = movie.getTitle();
+                fieldsUpdated++;
+            }
+            if(!"".equals(movie.getPosterPath())) {
+                posterPath = movie.getPosterPath();
+                fieldsUpdated++;
+            }
+            if(!"".equals(movie.getPlotSynopsis())) {
+                plotSynopsis = movie.getPlotSynopsis();
+                fieldsUpdated++;
+            }
+            if(0 != (movie.getUserRating())) {
+                userRating = movie.getUserRating();
+                fieldsUpdated++;
+            }
+            if(0 != (movie.getPopularity())) {
+                popularity = movie.getPopularity();
+                fieldsUpdated++;
+            }
+            if(null != (movie.getReleaseDate())) {
+                releaseDate = movie.getReleaseDate();
+                fieldsUpdated++;
+            }
+            Logger.v(LOG_TAG, "updateFields() finished. fieldsUpdated: " + String.valueOf(fieldsUpdated));
+        } else {
+            Logger.e(LOG_TAG, "updateFields() cannot receive null movie");
+        }
+    }
+
     public String getFormattedUserRating() {
         return String.valueOf(userRating) + '/' + 10;
     }
 
     @BindingAdapter("imageResource")
     public static void setImageResource(ImageView view, String url) {
-        Util.loadImageToView(view.getContext(), url, view,
+        Utility.loadImageToView(view.getContext(), url, view,
                 Constants.DEFAULT_POSTER_WIDTH, Constants.DEFAULT_POSTER_HEIGHT);
     }
 

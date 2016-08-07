@@ -10,14 +10,13 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.activities.MovieDetailsActivity;
 import com.devtau.popularmoviess2.activities.MainActivity;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.databinding.FragmentMovieDetailsBinding;
 import com.devtau.popularmoviess2.model.Movie;
-import com.devtau.popularmoviess2.util.Logger;
+import com.devtau.popularmoviess2.utility.Logger;
 /**
  * A fragment representing a single Movie detail screen.
  * This fragment is either contained in a {@link MainActivity}
@@ -47,6 +46,8 @@ public class MovieDetailsFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //https://developer.android.com/topic/libraries/data-binding/index.html
+        //https://stfalcon.com/en/blog/post/faster-android-apps-with-databinding
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_details, container, false);
         return binding.getRoot();
     }
@@ -71,19 +72,9 @@ public class MovieDetailsFragment extends Fragment implements
             case LOADER_RESULTS:
                 data.moveToFirst();
                 movie = new Movie(data);
-                initControls(movie);
+                binding.setMovie(movie);
                 break;
         }
-    }
-
-    private void initControls(Movie movie) {
-        if(movie == null) return;//method needs valid movie
-        binding.setMovie(movie);
-
-        //https://developer.android.com/topic/libraries/data-binding/index.html
-        //https://stfalcon.com/en/blog/post/faster-android-apps-with-databinding
-//        FragmentMovieDetailsBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_movie_details);
-//        binding.setMovie(movie);
     }
 
     @Override
