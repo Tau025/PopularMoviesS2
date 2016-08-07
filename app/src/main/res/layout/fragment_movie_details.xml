@@ -44,24 +44,42 @@
                     android:contentDescription="@string/movie_thumb" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/tv_release_date"
                     android:text="@{movie.getReleaseYear()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/iv_poster"
                     android:layout_toRightOf="@+id/iv_poster"
                     android:layout_toEndOf="@+id/iv_poster"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <TextView
+                    android:id="@+id/tv_user_rating"
+                    android:text="@{movie.getFormattedUserRating()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{movie.getFormattedUserRating()}"
                     android:layout_below="@+id/tv_release_date"
                     android:layout_alignLeft="@+id/tv_release_date"
                     android:layout_alignStart="@+id/tv_release_date"
                     android:layout_marginTop="24dp"
                     android:textStyle="bold" />
+
+                <!--It's hard to implement two-way data-binding on ToggleButton.
+                So here we have a good old findViewById.-->
+                <ToggleButton
+                    android:id="@+id/btn_is_favorite"
+                    android:button="@android:drawable/btn_star"
+                    android:background="@android:color/transparent"
+                    android:textOn=""
+                    android:textOff=""
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@+id/tv_user_rating"
+                    android:layout_alignLeft="@+id/tv_release_date"
+                    android:layout_alignStart="@+id/tv_release_date"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center" />
+
             </RelativeLayout>
 
             <TextView

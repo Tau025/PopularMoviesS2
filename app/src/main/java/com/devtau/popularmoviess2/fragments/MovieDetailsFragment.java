@@ -3,6 +3,7 @@ package com.devtau.popularmoviess2.fragments;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -10,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.activities.MovieDetailsActivity;
 import com.devtau.popularmoviess2.activities.MainActivity;
@@ -31,6 +33,7 @@ public class MovieDetailsFragment extends Fragment implements
     private Movie movie;
     private static final int LOADER_RESULTS = 556847;
     private FragmentMovieDetailsBinding binding;
+    private ToggleButton btn_is_favorite;
 
     public MovieDetailsFragment() { }
 
@@ -49,9 +52,22 @@ public class MovieDetailsFragment extends Fragment implements
         //https://developer.android.com/topic/libraries/data-binding/index.html
         //https://stfalcon.com/en/blog/post/faster-android-apps-with-databinding
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_details, container, false);
+        initIsFavoriteToggleButton(binding.getRoot());
         return binding.getRoot();
     }
 
+    private void initIsFavoriteToggleButton(View view) {
+        btn_is_favorite = (ToggleButton) view.findViewById(R.id.btn_is_favorite);
+        btn_is_favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                movie.setIsFavorite(!movie.isFavorite());
+                getActivity().getContentResolver().update(MoviesTable.CONTENT_URI,
+                        MoviesTable.getContentValues(movie),
+                        BaseColumns._ID + "=?", new String[]{String.valueOf(movieId)});
+            }
+        });
+    }
 
 
     //LoaderManager.LoaderCallbacks
@@ -60,18 +76,22 @@ public class MovieDetailsFragment extends Fragment implements
         switch (id) {
             case LOADER_RESULTS:
                 if(movieId != 0) {
-                    return new CursorLoader(getContext(), MoviesTable.buildOrderUri(movieId), null, null, null, null);
+                    return new CursorLoader(getContext(), MoviesTable.buildMovieUri(movieId), null, null, null, null);
                 }
         }
         return null;
     }
 
+    //onLoadFinished is being called not only after restartLoader() from onCreate() is finished
+    //but every time the db is being updated
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case LOADER_RESULTS:
+                Logger.d(LOG_TAG, "onLoadFinished()");
                 data.moveToFirst();
                 movie = new Movie(data);
+                btn_is_favorite.setChecked(movie.isFavorite());
                 binding.setMovie(movie);
                 break;
         }

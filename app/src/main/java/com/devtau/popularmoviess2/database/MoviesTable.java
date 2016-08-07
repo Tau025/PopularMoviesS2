@@ -18,6 +18,7 @@ public abstract class MoviesTable {
     public static final String USER_RATING = "userRating";
     public static final String POPULARITY = "popularity";
     public static final String RELEASE_DATE = "releaseDate";
+    public static final String IS_FAVORITE = "isFavorite";
 
     public static final String FIELDS = MySQLHelper.PRIMARY_KEY
             + TITLE + " TEXT, "
@@ -25,7 +26,8 @@ public abstract class MoviesTable {
             + PLOT_SYNOPSIS + " TEXT, "
             + USER_RATING + " REAL, "
             + POPULARITY + " REAL, "
-            + RELEASE_DATE + " TEXT";
+            + RELEASE_DATE + " TEXT, "
+            + IS_FAVORITE + " INTEGER";
 
     public static final Uri CONTENT_URI =
             MySQLHelper.BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();
@@ -36,11 +38,11 @@ public abstract class MoviesTable {
             ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + MySQLHelper.CONTENT_AUTHORITY + "/" + TABLE_NAME;
     private static final String LOG_TAG = MoviesTable.class.getSimpleName();
 
-    public static Uri buildOrderUri(long id) {
+    public static Uri buildMovieUri(long id) {
         return ContentUris.withAppendedId(CONTENT_URI, id);
     }
 
-    public static String getOrderIdFromUri(Uri uri) {
+    public static String getIdFromUri(Uri uri) {
         return uri.getPathSegments().get(1);
     }
 
@@ -55,6 +57,7 @@ public abstract class MoviesTable {
         cv.put(USER_RATING, item.getUserRating());
         cv.put(POPULARITY, item.getPopularity());
         cv.put(RELEASE_DATE, Utility.dateFormat.format(item.getReleaseDate().getTime()));
+        cv.put(IS_FAVORITE, item.isFavorite() ? 1 : 0);
         return cv;
     }
 }

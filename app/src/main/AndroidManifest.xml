@@ -2,7 +2,7 @@
 <manifest package="com.devtau.popularmoviess2"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- This permission is necessary in order for Sunshine to perform network access. -->
+    <!-- This permission is necessary in order to perform network access. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Permissions required by the sync adapter -->

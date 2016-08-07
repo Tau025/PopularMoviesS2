@@ -21,6 +21,7 @@ public class Movie {
     private double userRating;
     private double popularity;
     private Calendar releaseDate = new GregorianCalendar(1970, 0, 1);
+    private boolean isFavorite;
 
 
     public Movie(long id, String title, String posterPath, String plotSynopsis,
@@ -40,6 +41,7 @@ public class Movie {
         posterPath = cursor.getString(cursor.getColumnIndex(POSTER_PATH));
         plotSynopsis = cursor.getString(cursor.getColumnIndex(PLOT_SYNOPSIS));
         userRating = cursor.getDouble(cursor.getColumnIndex(USER_RATING));
+        popularity = cursor.getDouble(cursor.getColumnIndex(POPULARITY));
         try {
             releaseDate = new GregorianCalendar(1970, 0, 1);
             String dateString = cursor.getString(cursor.getColumnIndex(RELEASE_DATE));
@@ -48,6 +50,13 @@ public class Movie {
             Logger.e(LOG_TAG, "while parsing releaseDate from Cursor", e);
             e.printStackTrace();
         }
+        isFavorite = (cursor.getInt(cursor.getColumnIndex(IS_FAVORITE)) == 1);
+    }
+
+    //setter
+    public void setIsFavorite(boolean favorite) {
+        isFavorite = favorite;
+        Logger.d(LOG_TAG, "isFavorite: " + String.valueOf(isFavorite));
     }
 
 
@@ -80,6 +89,10 @@ public class Movie {
         return releaseDate;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
     public String getReleaseYear() {
         Calendar defaultDate = new GregorianCalendar(1970, 0, 1);
         if(getReleaseDate().compareTo(defaultDate) == 0) {
@@ -104,18 +117,20 @@ public class Movie {
                 plotSynopsis = movie.getPlotSynopsis();
                 fieldsUpdated++;
             }
-            if(0 != (movie.getUserRating())) {
+            if(0 != movie.getUserRating()) {
                 userRating = movie.getUserRating();
                 fieldsUpdated++;
             }
-            if(0 != (movie.getPopularity())) {
+            if(0 != movie.getPopularity()) {
                 popularity = movie.getPopularity();
                 fieldsUpdated++;
             }
-            if(null != (movie.getReleaseDate())) {
+            if(null != movie.getReleaseDate()) {
                 releaseDate = movie.getReleaseDate();
                 fieldsUpdated++;
             }
+            isFavorite = movie.isFavorite();
+            fieldsUpdated++;
             Logger.v(LOG_TAG, "updateFields() finished. fieldsUpdated: " + String.valueOf(fieldsUpdated));
         } else {
             Logger.e(LOG_TAG, "updateFields() cannot receive null movie");

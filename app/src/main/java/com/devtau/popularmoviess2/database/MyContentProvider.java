@@ -17,8 +17,8 @@ public class MyContentProvider extends ContentProvider {
     private static final String LOG_TAG = MyContentProvider.class.getSimpleName();
     private MySQLHelper mOpenHelper;
 
-    static final int ORDER = 100;
-    static final int ORDER_BY_ID = 101;
+    static final int MOVIE = 100;
+    static final int MOVIE_BY_ID = 101;
 
     //задача QUERY_BUILDER в том чтобы сцепить все связанные таблицы воедино,
     //с тем чтобы дальше выполнять запросы к этой большой таблице
@@ -41,8 +41,8 @@ public class MyContentProvider extends ContentProvider {
         final String authority = MySQLHelper.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
-        matcher.addURI(authority, MoviesTable.TABLE_NAME, ORDER);
-        matcher.addURI(authority, MoviesTable.TABLE_NAME + "/*", ORDER_BY_ID);
+        matcher.addURI(authority, MoviesTable.TABLE_NAME, MOVIE);
+        matcher.addURI(authority, MoviesTable.TABLE_NAME + "/*", MOVIE_BY_ID);
         return matcher;
     }
 
@@ -51,9 +51,9 @@ public class MyContentProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ORDER:
+            case MOVIE:
                 return MoviesTable.CONTENT_TYPE;
-            case ORDER_BY_ID:
+            case MOVIE_BY_ID:
                 return MoviesTable.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -70,11 +70,11 @@ public class MyContentProvider extends ContentProvider {
         Uri returnUri;
 
         switch(match) {
-            case ORDER: {
+            case MOVIE: {
 //                normalizeDate(values);
                 long _id = db.insert(MoviesTable.TABLE_NAME, null, values);
                 if(_id > 0) {
-                    returnUri = MoviesTable.buildOrderUri(_id);
+                    returnUri = MoviesTable.buildMovieUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -95,8 +95,8 @@ public class MyContentProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
 
-            // "order"
-            case ORDER: {
+            // "movie"
+            case MOVIE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         MoviesTable.TABLE_NAME,
                         projection,
@@ -109,8 +109,8 @@ public class MyContentProvider extends ContentProvider {
                 break;
             }
 
-            // "order/*"
-            case ORDER_BY_ID: {
+            // "movie/*"
+            case MOVIE_BY_ID: {
                 retCursor = getMovieById(uri, projection, sortOrder);
                 break;
             }
@@ -129,7 +129,7 @@ public class MyContentProvider extends ContentProvider {
         int rowsUpdated;
 
         switch (match) {
-            case ORDER: {
+            case MOVIE: {
 //                normalizeDate(values);
                 rowsUpdated = db.update(MoviesTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
@@ -152,7 +152,7 @@ public class MyContentProvider extends ContentProvider {
         // this makes delete all rows return the number of rows deleted
         if (null == selection) selection = "1";
         switch (match) {
-            case ORDER: {
+            case MOVIE: {
                 rowsDeleted = db.delete(MoviesTable.TABLE_NAME, selection, selectionArgs);
                 break;
             }
@@ -171,7 +171,7 @@ public class MyContentProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case ORDER:
+            case MOVIE:
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
@@ -194,7 +194,7 @@ public class MyContentProvider extends ContentProvider {
     }
 
     private Cursor getMovieById(Uri uri, String[] projection, String sortOrder) {
-        String orderIdString = MoviesTable.getOrderIdFromUri(uri);
+        String orderIdString = MoviesTable.getIdFromUri(uri);
 
         return QUERY_BUILDER.query(mOpenHelper.getReadableDatabase(),
                 projection,
