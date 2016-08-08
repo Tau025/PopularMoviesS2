@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Популярные фильмы S2</string>
+    <string name="title_movie_detail">Подробности по фильму</string>
+    <string name="movie_thumb">Постер фильма</string>
+
+    <string name="no_API_key">Этому приложению неоходим API-key.\n
+        Пожалуйста добавьте его в это место Constants.API_KEY_VALUE</string>
+    <string name="API_key_length_is_bad">API-key присуствует, но его длинна не соответстует требованиям.\n
+        Правильный API-key должен состоять из ровно 32 символов.</string>
+    <string name="also">\n\nтакже\n\n</string>
+
+    <string name="no_internet_msg">Нет подключения к сети интернет =(\nПопробовать снова?</string>
+    <string name="movie_load_failed_msg">Не удалось показать подробности по этому фильму</string>
+
+    <string name="sort_order_most_popular">Самые популярные</string>
+    <string name="sort_order_top_rated">Высший рейтинг</string>
+</resources>

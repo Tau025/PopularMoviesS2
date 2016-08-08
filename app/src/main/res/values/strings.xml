@@ -7,18 +7,16 @@
     <string name="API_key_length_is_bad">API-key found, but it seems to be too short or too long.\nValid API-key should be 32 chars long.</string>
     <string name="also">\n\nalso\n\n</string>
 
-    <string name="no_internet_msg">Нет подключения к сети интернет =(\nПопробовать снова?</string>
-    <string name="movie_load_failed_msg">Не удалось показать подробности по этому заказу</string>
+    <string name="no_internet_msg">No internet =(\nTry again?</string>
+    <string name="movie_load_failed_msg">Could not load details on the selected movie</string>
 
     <string name="sort_order_most_popular">Most popular</string>
     <string name="sort_order_top_rated">Top rated</string>
-    <string name="sort_order_most_popular_key">popular</string>
-    <string name="sort_order_top_rated_key">top_rated</string>
+    <string name="sort_order_most_popular_key" translatable="false">popular</string>
+    <string name="sort_order_top_rated_key" translatable="false">top_rated</string>
 
-    <string name="title_activity_movie_details">Movie details</string>
-
-    <string name="sync_account_type">popularmoviess2.devtau.com</string>
+    <string name="sync_account_type" translatable="false">popularmoviess2.devtau.com</string>
     <!--see also MySQLHelper.CONTENT_AUTHORITY-->
-    <string name="content_authority">com.devtau.popularmoviess2</string>
+    <string name="content_authority" translatable="false">com.devtau.popularmoviess2</string>
 
 </resources>
