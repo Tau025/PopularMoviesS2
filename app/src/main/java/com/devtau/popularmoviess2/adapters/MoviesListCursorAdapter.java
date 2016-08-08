@@ -32,7 +32,7 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
         String posterPath = cursor.getString(cursor.getColumnIndex(MoviesTable.POSTER_PATH));
-        Utility.loadImageToView(holder.view.getContext(), posterPath, holder.movieThumb, imageWidth, imageHeight);
+        Utility.setPosterImage(holder.movieThumb, posterPath);
     }
 
     @Override

@@ -2,16 +2,16 @@ package com.devtau.popularmoviess2.model;
 
 import android.database.Cursor;
 import android.provider.BaseColumns;
-import android.widget.ImageView;
-import com.devtau.popularmoviess2.utility.Constants;
 import com.devtau.popularmoviess2.utility.Logger;
 import com.devtau.popularmoviess2.utility.Utility;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import static com.devtau.popularmoviess2.database.MoviesTable.*;
-import android.databinding.BindingAdapter;
-
+/**
+ * Главный класс модели всего приложения
+ * Main class of application model
+ */
 public class Movie {
     private final String LOG_TAG = Movie.class.getSimpleName();
     private long id;
@@ -141,11 +141,6 @@ public class Movie {
         return String.valueOf(userRating) + '/' + 10;
     }
 
-    @BindingAdapter("imageResource")
-    public static void setImageResource(ImageView view, String url) {
-        Utility.loadImageToView(view.getContext(), url, view,
-                Constants.DEFAULT_POSTER_WIDTH, Constants.DEFAULT_POSTER_HEIGHT);
-    }
 
     @Override
     public boolean equals(Object obj) {

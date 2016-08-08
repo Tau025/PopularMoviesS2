@@ -172,7 +172,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     //updates or creates new Movie in our app db
     private Movie updateOrCreateMovie(Movie parsedMovie) {
-        Logger.d(LOG_TAG, "parsedMovie.getPopularity(): " + String.valueOf(parsedMovie.getPopularity()));
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(MoviesTable.buildMovieUri(parsedMovie.getId()), null, null, null, null);
         DatabaseUtils.dumpCursor(cursor);
