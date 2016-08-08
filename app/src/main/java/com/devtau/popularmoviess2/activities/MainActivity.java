@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.devtau.popularmoviess2.adapters.MoviesListCursorAdapter;
 import com.devtau.popularmoviess2.R;
+import com.devtau.popularmoviess2.fragments.NoInternetDF;
+import com.devtau.popularmoviess2.fragments.ProgressBarDF;
 import com.devtau.popularmoviess2.presenters.MoviesListPresenter;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 /**
@@ -68,19 +70,18 @@ public class MainActivity extends AppCompatActivity implements
 
 
     @Override
-    public void showNoInternet() {
-        //TODO: implement
+    public boolean showNoInternetDF() {
+        return NoInternetDF.show(getSupportFragmentManager(), presenter);
     }
 
     @Override
-    public void showProgressBar() {
-        //TODO: implement
+    public boolean showProgressBarDF() {
+        return ProgressBarDF.show(getSupportFragmentManager());
     }
 
     @Override
-    public boolean dismissProgressBar() {
-        //TODO: implement
-        return false;
+    public boolean dismissProgressBarDF() {
+        return ProgressBarDF.dismiss(getSupportFragmentManager());
     }
 
     @Override

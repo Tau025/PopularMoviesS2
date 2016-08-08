@@ -9,6 +9,7 @@
 
     <string name="no_internet_msg">No internet =(\nTry again?</string>
     <string name="movie_load_failed_msg">Could not load details on the selected movie</string>
+    <string name="online_msg">Online!</string>
 
     <string name="sort_order_most_popular">Most popular</string>
     <string name="sort_order_top_rated">Top rated</string>

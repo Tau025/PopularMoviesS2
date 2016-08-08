@@ -16,6 +16,7 @@ import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.activities.MovieDetailsActivity;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
+import com.devtau.popularmoviess2.fragments.NoInternetDF;
 import com.devtau.popularmoviess2.model.SortBy;
 import com.devtau.popularmoviess2.sync.SyncAdapter;
 import com.devtau.popularmoviess2.utility.Constants;
@@ -26,7 +27,8 @@ import com.devtau.popularmoviess2.view.MoviesListViewInterface;
  */
 public class MoviesListPresenter implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        SyncAdapter.SyncAdapterListener {
+        SyncAdapter.SyncAdapterListener,
+        NoInternetDF.NoInternetDFListener {
     private static final String LOG_TAG = MoviesListPresenter.class.getSimpleName();
     private static final int LOADER_RESULTS = 115297;
     private MoviesListViewInterface view;
@@ -43,7 +45,7 @@ public class MoviesListPresenter implements
         if (checkIsOnline()){
             SyncAdapter.initializeSyncAdapter(view.getContext(), this);
         } else {
-            view.showNoInternet();
+            view.showNoInternetDF();
         }
     }
 
@@ -55,9 +57,10 @@ public class MoviesListPresenter implements
     }
 
     //NoInternetDFListener
+    @Override
     public void retryConnection(){
         //делаем несколько попыток повторного подключения с некоторым интервалом (см. Constants)
-        view.showProgressBar();
+        view.showProgressBarDF();
         counter = 0;
         final Handler handler = new Handler();
         handler.post(new Runnable() {
@@ -65,15 +68,16 @@ public class MoviesListPresenter implements
             public void run() {
                 if (checkIsOnline()) {
                     Logger.v(LOG_TAG, "Online!");
-                    view.dismissProgressBar();
+                    view.dismissProgressBarDF();
+                    view.showMessage(view.getContext().getString(R.string.online_msg));
                     sendRequestToServer();
                 } else if (counter < Constants.RETRY_COUNT) {
                     Logger.v(LOG_TAG, "Retrying connection. Counter: " + String.valueOf(counter));
                     counter++;
                     handler.postDelayed(this, Constants.RETRY_LAG);
-                } else if (view.dismissProgressBar()){
+                } else if (view.dismissProgressBarDF()){
                     //если все попытки не увенчались успехом, показываем диалог еще раз
-                    view.showNoInternet();
+                    view.showNoInternetDF();
                 }
             }
         });

@@ -157,7 +157,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private Movie updateOrCreateMovie(Movie parsedMovie) {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(MoviesTable.buildMovieUri(parsedMovie.getId()), null, null, null, null);
-        DatabaseUtils.dumpCursor(cursor);
+//        DatabaseUtils.dumpCursor(cursor);
 
         if(cursor != null && cursor.getCount() != 0) {
             cursor.moveToFirst();

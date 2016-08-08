@@ -15,4 +15,5 @@
 
     <string name="sort_order_most_popular">Самые популярные</string>
     <string name="sort_order_top_rated">Высший рейтинг</string>
+    <string name="online_msg">В сети!</string>
 </resources>
