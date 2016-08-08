@@ -13,12 +13,9 @@ import com.devtau.popularmoviess2.utility.Utility;
 public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesListCursorAdapter.ViewHolder>
         implements View.OnClickListener {
     private OnItemClickListener listener;
-    private int imageWidth, imageHeight;
 
-    public MoviesListCursorAdapter(OnItemClickListener listener, int imageWidth, int imageHeight) {
+    public MoviesListCursorAdapter(OnItemClickListener listener) {
         this.listener = listener;
-        this.imageWidth = imageWidth;
-        this.imageHeight = imageHeight;
     }
 
     @Override

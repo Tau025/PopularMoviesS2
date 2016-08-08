@@ -16,7 +16,7 @@ import java.net.URL;
  */
 public class ImageDownloaderService extends IntentService {
     private static final String ACTION_DOWNLOAD_IMAGE = "com.devtau.popularmoviess2.utility.action.DOWNLOAD_IMAGE";
-    private static final String EXTRA_POSTER_PATH = "com.devtau.popularmoviess2.utility.extra.PARAM1";
+    private static final String EXTRA_POSTER_PATH = "com.devtau.popularmoviess2.utility.extra.POSTER_PATH";
     private static final String LOG_TAG = ImageDownloaderService.class.getSimpleName();
 
     public ImageDownloaderService() {
@@ -37,18 +37,14 @@ public class ImageDownloaderService extends IntentService {
             String posterPath = intent.getStringExtra(EXTRA_POSTER_PATH);
             Bitmap bitmap = handleActionDownloadImage(posterPath);
             if(bitmap != null) {
-                //TODO: броадкасты
-                //сохранить битмап и отправить броадкаст об успехе
                 FileManager.saveImageToCache(this, posterPath, bitmap);
-            } else {
-                //отправить броадкаст о неудаче
             }
         }
     }
 
     @Nullable
     private Bitmap handleActionDownloadImage(String posterPath) {
-        Logger.d(LOG_TAG, "Started ImageDownloaderService");
+        Logger.v(LOG_TAG, "Started ImageDownloaderService");
         InputStream inputStream = null;
         try {
             URL url = getUrlFromPosterPath(posterPath);

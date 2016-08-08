@@ -11,7 +11,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.devtau.popularmoviess2.adapters.MoviesListCursorAdapter;
@@ -39,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final int LOADER_RESULTS = 115297;
     private MoviesListCursorAdapter rvAdapter;
     private SortBy sortBy = Constants.DEFAULT_SORT_BY;
-    private int imageWidth, imageHeight;
-    private int columnCount = 2;
 
 
     @Override
@@ -48,27 +45,18 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calculateParamsOfThumb();
+        if (findViewById(R.id.movie_details_container) != null) {
+            mTwoPane = true;
+        }
 
-        rvAdapter = new MoviesListCursorAdapter(this, imageWidth, imageHeight);
+        rvAdapter = new MoviesListCursorAdapter(this);
         getSupportLoaderManager().restartLoader(LOADER_RESULTS, null, this);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setAdapter(rvAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, columnCount));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, mTwoPane ? 3 : 2));
 
-        if (findViewById(R.id.movie_details_container) != null) {
-            mTwoPane = true;
-        }
         SyncAdapter.initializeSyncAdapter(this);
-    }
-
-    private void calculateParamsOfThumb() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        imageWidth = metrics.widthPixels / columnCount;
-        imageHeight = Math.round(((float) imageWidth /
-                Constants.DEFAULT_POSTER_WIDTH) * Constants.DEFAULT_POSTER_HEIGHT);
     }
 
 
@@ -125,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Logger.v(LOG_TAG, "onLoadFinished()");
         switch (loader.getId()) {
             case LOADER_RESULTS:
                 this.rvAdapter.swapCursor(data);

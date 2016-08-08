@@ -102,9 +102,9 @@ public class MovieDetailsFragment extends Fragment implements
     //but every time the db is being updated
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Logger.v(LOG_TAG, "onLoadFinished()");
         switch (loader.getId()) {
             case LOADER_RESULTS:
-                Logger.d(LOG_TAG, "onLoadFinished()");
                 data.moveToFirst();
                 movie = new Movie(data);
                 populateUI();
