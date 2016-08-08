@@ -44,24 +44,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     // 60 seconds (1 minute) * 180 = 3 hours
     public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
-    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-    private static final int NOTIFICATION_ID = 275236;
     private static SyncAdapterListener listener;
-
-    private static final String[] NOTIFICATION_PROJECTION = new String[] {
-            MoviesTable.TITLE,
-            MoviesTable.POSTER_PATH,
-            MoviesTable.PLOT_SYNOPSIS,
-            MoviesTable.USER_RATING,
-            MoviesTable.RELEASE_DATE
-    };
-
-    // these indices must match the projection
-    private static final int INDEX_TITLE = 0;
-    private static final int INDEX_POSTER_PATH = 1;
-    private static final int INDEX_PLOT_SYNOPSIS = 2;
-    private static final int INDEX_USER_RATING = 3;
-    private static final int INDEX_RELEASE_DATE = 4;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -266,10 +249,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         ContentResolver.requestSync(getSyncAccount(context), MySQLHelper.CONTENT_AUTHORITY, bundle);
     }
 
-    public static void initializeSyncAdapter(Context context) {
+    public static void initializeSyncAdapter(Context context, SyncAdapterListener listener) {
         Logger.v(LOG_TAG, "in initializeSyncAdapter()");
         try {
-            listener = (SyncAdapterListener) context;
+            SyncAdapter.listener = listener;
         } catch (Exception e) {
             Logger.e(LOG_TAG, "while initializing listener", e);
         }

@@ -1,26 +1,18 @@
 package com.devtau.popularmoviess2.activities;
 
-import android.content.Intent;
+import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
-import android.provider.BaseColumns;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.devtau.popularmoviess2.adapters.MoviesListCursorAdapter;
-import com.devtau.popularmoviess2.database.MoviesTable;
-import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.model.SortBy;
-import com.devtau.popularmoviess2.sync.SyncAdapter;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.presenters.MoviesListPresenter;
+import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 /**
  * An activity representing a list of Movies. This activity
  * has different presentations for handset and tablet-size devices. On
@@ -30,14 +22,12 @@ import com.devtau.popularmoviess2.utility.Logger;
  * item details side-by-side using two vertical panes.
  */
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor>,
         MoviesListCursorAdapter.OnItemClickListener,
-        SyncAdapter.SyncAdapterListener {
+        MoviesListViewInterface {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean mTwoPane;
-    private static final int LOADER_RESULTS = 115297;
     private MoviesListCursorAdapter rvAdapter;
-    private SortBy sortBy = Constants.DEFAULT_SORT_BY;
+    private MoviesListPresenter presenter;
 
 
     @Override
@@ -48,15 +38,10 @@ public class MainActivity extends AppCompatActivity implements
         if (findViewById(R.id.movie_details_container) != null) {
             mTwoPane = true;
         }
-
-        rvAdapter = new MoviesListCursorAdapter(this);
-        getSupportLoaderManager().restartLoader(LOADER_RESULTS, null, this);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setAdapter(rvAdapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, mTwoPane ? 3 : 2));
-
-        SyncAdapter.initializeSyncAdapter(this);
+        initList();
+        presenter = new MoviesListPresenter(this);
+        presenter.sendRequestToServer();
+        presenter.restartLoader();
     }
 
 
@@ -70,10 +55,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_order_toggle:
-                sortBy = SortBy.toggle(sortBy);
-                item.setTitle(sortBy.getDescription(this));
-                SyncAdapter.syncImmediately(this);
-                getSupportLoaderManager().restartLoader(LOADER_RESULTS, null, this);
+                item.setTitle(presenter.toggleSortOrder());
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -81,58 +63,46 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClicked(Cursor cursor) {
-        long movieId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
-        Logger.v(LOG_TAG, "mTwoPane: " + String.valueOf(mTwoPane));
-        DatabaseUtils.dumpCursor(cursor);
-        if (mTwoPane) {
-            Bundle arguments = new Bundle();
-            arguments.putLong(MovieDetailsFragment.MOVIE_ID_EXTRA, movieId);
-            MovieDetailsFragment fragment = new MovieDetailsFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_details_container, fragment)
-                    .commit();
-        } else {
-            Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
-            intent.putExtra(MovieDetailsFragment.MOVIE_ID_EXTRA, movieId);
-            startActivity(intent);
-        }
+        presenter.onListItemClick(cursor, mTwoPane);
     }
 
 
-    //LoaderManager.LoaderCallbacks
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_RESULTS:
-                String sortOrder = sortBy.getDatabaseID() + " DESC";
-                return new CursorLoader(this, MoviesTable.CONTENT_URI, null, null, null, sortOrder);
-        }
-        return null;
+    public void showNoInternet() {
+        //TODO: implement
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Logger.v(LOG_TAG, "onLoadFinished()");
-        switch (loader.getId()) {
-            case LOADER_RESULTS:
-                this.rvAdapter.swapCursor(data);
-                break;
-        }
+    public void showProgressBar() {
+        //TODO: implement
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        switch (loader.getId()) {
-            case LOADER_RESULTS:
-                this.rvAdapter.swapCursor(null);
-                break;
-        }
+    public boolean dismissProgressBar() {
+        //TODO: implement
+        return false;
     }
 
-    //SyncAdapterListener
     @Override
-    public SortBy getSortBy() {
-        return sortBy;
+    public void initList() {
+        rvAdapter = new MoviesListCursorAdapter(this);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(rvAdapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, mTwoPane ? 3 : 2));
+    }
+
+    @Override
+    public void showMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void swapCursor(Cursor cursor) {
+        rvAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 }
