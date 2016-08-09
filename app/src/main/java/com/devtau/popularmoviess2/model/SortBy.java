@@ -5,7 +5,10 @@ import android.support.annotation.NonNull;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.utility.Constants;
-
+/**
+ * Перечисление для вариантов сортировки списка фильмов
+ * Enum for sort options of the list of movies
+ */
 public enum SortBy {
     MOST_POPULAR(R.string.sort_order_most_popular, R.string.sort_order_most_popular_key, MoviesTable.POPULARITY),
     TOP_RATED(R.string.sort_order_top_rated, R.string.sort_order_top_rated_key, MoviesTable.USER_RATING);

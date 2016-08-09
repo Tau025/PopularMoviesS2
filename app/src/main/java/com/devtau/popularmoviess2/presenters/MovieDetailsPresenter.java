@@ -14,6 +14,7 @@ import com.devtau.popularmoviess2.utility.Logger;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
 /**
  * Презентер подробностей по выбранному фильму
+ * Presenter of movie details
  */
 public class MovieDetailsPresenter implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -28,7 +29,8 @@ public class MovieDetailsPresenter implements
         this.movieId = movieId;
     }
 
-    //отправим запрос контент-ресолверу за нужным курсором
+    //Отправим запрос контент-ресолверу за нужным курсором
+    //Request a content resolver for a needed cursor
     public void restartLoader() {
         ((AppCompatActivity) view.getContext()).getSupportLoaderManager()
                 .restartLoader(LOADER_RESULTS, null, this);
@@ -60,24 +62,31 @@ public class MovieDetailsPresenter implements
         return null;
     }
 
+    //onLoadFinished вызывается не только после завершения загрузки, вызванной методом restartLoader(),
+    //но и каждый раз при обновлении базы
     //onLoadFinished is being called not only after restartLoader() from onCreate() is finished
     //but every time the db is being updated
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         Logger.v(LOG_TAG, "onLoadFinished()");
         switch (loader.getId()) {
             case LOADER_RESULTS:
-                //попробуем сформировать заказ из курсора
+                //Попробуем сформировать заказ из курсора
+                //Try to create a Movie object from received cursor
 //                DatabaseUtils.dumpCursor(data);
-                if(data != null) {
-                    data.moveToFirst();
-                    movie = new Movie(data);
+                if(cursor != null) {
+                    cursor.moveToFirst();
+                    movie = new Movie(cursor);
+                } else {
+                    Logger.e(LOG_TAG, "onLoadFinished() received a null cursor");
                 }
 
-                //обрабатывать вью-элементы этой ативности нужно только если получен валидный заказ
+                //Обрабатывать вью-элементы связанной ативности нужно только если получен валидный фильм
+                //Processing views of corresponding activity is necessary only if we've got a valid movie
                 if (movie != null) {
                     view.populateUI(movie);
                 } else {
+                    Logger.e(LOG_TAG, "onLoadFinished() failed to create a valid movie from cursor");
                     view.showMessage(view.getContext().getString(R.string.movie_load_failed_msg));
                 }
                 break;

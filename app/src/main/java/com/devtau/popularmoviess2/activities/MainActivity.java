@@ -16,6 +16,10 @@ import com.devtau.popularmoviess2.fragments.ProgressBarDF;
 import com.devtau.popularmoviess2.presenters.MoviesListPresenter;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 /**
+ * Главная активность приложения, показывающая список фильмов и дополняющая его подробностями
+ * по выбранному фильму, если позволяет место на экране устройства или запускающая вторую активность
+ * {@link MovieDetailsActivity}, если места на экране не достаточно.
+ *
  * An activity representing a list of Movies. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
@@ -24,7 +28,7 @@ import com.devtau.popularmoviess2.view.MoviesListViewInterface;
  * item details side-by-side using two vertical panes.
  */
 public class MainActivity extends AppCompatActivity implements
-        MoviesListCursorAdapter.OnItemClickListener,
+        MoviesListCursorAdapter.ListItemClickListener,
         MoviesListViewInterface {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private boolean mTwoPane;
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onItemClicked(Cursor cursor) {
+    public void onListItemClicked(Cursor cursor) {
         presenter.onListItemClick(cursor, mTwoPane);
     }
 

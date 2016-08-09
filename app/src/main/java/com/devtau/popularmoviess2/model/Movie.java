@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import static com.devtau.popularmoviess2.database.MoviesTable.*;
 /**
- * Главный класс модели всего приложения
- * Main class of application model
+ * Главный класс модели всего приложения. Содержит в себе все подробности по фильму
+ * Main class of application model. It contains all the details on the movie
  */
 public class Movie {
     private final String LOG_TAG = Movie.class.getSimpleName();
@@ -129,8 +129,11 @@ public class Movie {
                 releaseDate = movie.getReleaseDate();
                 fieldsUpdated++;
             }
-            isFavorite = movie.isFavorite();
-            fieldsUpdated++;
+            //Мы не хотим обновлять поле isFavorite, т.к. оно не имеет отношения к базе на сервере
+            //и каждый раз при синхронизации с сервера будет приходить фильм с таким же id? но без
+            //поля isFavorite. Следовательно оно будет сбрасываться, а мы этого не хотим.
+            //We don't want to update isFavorite field because if we do, SyncAdapter would erase
+            //saved isFavorite state every time it syncs with server.
             Logger.v(LOG_TAG, "updateFields() finished. fieldsUpdated: " + String.valueOf(fieldsUpdated));
         } else {
             Logger.e(LOG_TAG, "updateFields() cannot receive null movie");

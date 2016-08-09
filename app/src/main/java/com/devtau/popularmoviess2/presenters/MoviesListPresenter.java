@@ -24,6 +24,7 @@ import com.devtau.popularmoviess2.utility.Logger;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 /**
  * Презентер, показывающий список фильмов
+ * Presenter for the movies list
  */
 public class MoviesListPresenter implements
         LoaderManager.LoaderCallbacks<Cursor>,
@@ -32,8 +33,7 @@ public class MoviesListPresenter implements
     private static final String LOG_TAG = MoviesListPresenter.class.getSimpleName();
     private static final int LOADER_RESULTS = 115297;
     private MoviesListViewInterface view;
-    //счетчик попыток переподключения для метода retryConnection()
-    private int counter;
+    private int retryConnectionsCounter;
     private SortBy sortBy = Constants.DEFAULT_SORT_BY;
 
 
@@ -56,12 +56,12 @@ public class MoviesListPresenter implements
         return netInfo != null && netInfo.isConnected();
     }
 
-    //NoInternetDFListener
     @Override
     public void retryConnection(){
-        //делаем несколько попыток повторного подключения с некоторым интервалом (см. Constants)
+        //Делаем несколько попыток повторного подключения с некоторым интервалом (см. Constants)
+        //Make several attempts to find the net with some lag in between
         view.showProgressBarDF();
-        counter = 0;
+        retryConnectionsCounter = 0;
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -71,12 +71,13 @@ public class MoviesListPresenter implements
                     view.dismissProgressBarDF();
                     view.showMessage(view.getContext().getString(R.string.online_msg));
                     sendRequestToServer();
-                } else if (counter < Constants.RETRY_COUNT) {
-                    Logger.v(LOG_TAG, "Retrying connection. Counter: " + String.valueOf(counter));
-                    counter++;
+                } else if (retryConnectionsCounter < Constants.RETRY_COUNT) {
+                    Logger.v(LOG_TAG, "Retrying connection. Counter: " + String.valueOf(retryConnectionsCounter));
+                    retryConnectionsCounter++;
                     handler.postDelayed(this, Constants.RETRY_LAG);
                 } else if (view.dismissProgressBarDF()){
-                    //если все попытки не увенчались успехом, показываем диалог еще раз
+                    //Если все попытки не увенчались успехом, показываем диалог еще раз
+                    //If all attempts had failed we show a dialog to user once more
                     view.showNoInternetDF();
                 }
             }
@@ -84,15 +85,19 @@ public class MoviesListPresenter implements
     }
 
     public void restartLoader() {
-        //отправим запрос контент-ресолверу за нужным курсором
+        //Отправим запрос контент-ресолверу за нужным курсором
+        //Request a content resolver for a needed cursor
         ((AppCompatActivity) view.getContext()).getSupportLoaderManager()
                 .restartLoader(LOADER_RESULTS, null, this);
     }
 
     public void onListItemClick(Cursor cursor, boolean twoPane) {
-        //getItemAtPosition вернет полный курсор всех строк списка, но выставленный в нужную позицию
-        //таким образом, вызывать cursor.moveToFirst не требуется
+        //recyclerView.getChildLayoutPosition() вернет полный курсор всех строк списка,
+        //но выставленный в нужную позицию. Таким образом, вызывать cursor.moveToFirst не требуется
         //и можно сразу работать с активной строкой курсора
+        //recyclerView.getChildLayoutPosition() returns full cursor of listed items but it will be
+        //moved to position of selected list item. Hence client don't need to use cursor.moveToFirst
+        //and is able to work with active cursor row right off
 //        DatabaseUtils.dumpCursor(cursor);
         if(cursor != null) {
             long movieId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
@@ -126,6 +131,7 @@ public class MoviesListPresenter implements
         return sortBy;
     }
 
+
     //LoaderManager.LoaderCallbacks
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -138,6 +144,10 @@ public class MoviesListPresenter implements
         return null;
     }
 
+    //onLoadFinished вызывается не только после завершения загрузки, вызванной методом restartLoader(),
+    //но и каждый раз при обновлении базы
+    //onLoadFinished is being called not only after restartLoader() from onCreate() is finished
+    //but every time the db is being updated
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 //        Logger.v(LOG_TAG, "onLoadFinished()");

@@ -12,7 +12,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 /**
- * Сервис для загрузки изображений с нашего сервера в папку кэша на устройстве
+ * Сервис для асинхронной загрузки изображений с нашего сервера в папку кэша на устройстве
+ * Service for asynchronous downloading images from server to the device cache
  */
 public class ImageDownloaderService extends IntentService {
     private static final String ACTION_DOWNLOAD_IMAGE = "com.devtau.popularmoviess2.utility.action.DOWNLOAD_IMAGE";
@@ -52,6 +53,7 @@ public class ImageDownloaderService extends IntentService {
                 inputStream = url.openConnection().getInputStream();
                 return BitmapFactory.decodeStream(inputStream);
             } else {
+                Logger.e(LOG_TAG, "Can't start download with null URL");
                 return null;
             }
         } catch (IOException e) {
@@ -60,11 +62,11 @@ public class ImageDownloaderService extends IntentService {
         } finally {
             try {
                 if(inputStream != null) {
-                    Logger.v(LOG_TAG, "Closing inputStream");
+//                    Logger.v(LOG_TAG, "Closing inputStream");
                     inputStream.close();
                 }
             } catch (IOException e) {
-                Logger.e(LOG_TAG, "Error while closing inputStream", e);
+                Logger.e(LOG_TAG, "While closing inputStream", e);
             }
         }
     }
@@ -73,7 +75,7 @@ public class ImageDownloaderService extends IntentService {
     private URL getUrlFromPosterPath(String posterPath) {
         String posterEndpoint;
         if (TextUtils.isEmpty(posterPath) || "".equals(posterPath)) {
-            Logger.e(LOG_TAG, "No posterUrlString found in movie. Replacing with Kitty");
+            Logger.e(LOG_TAG, "No valid posterPath found in movie. Replacing with kitty to keep user happy");
             posterEndpoint = "http://kogteto4ka.ru/wp-content/uploads/2012/04/%D0%9A%D0%BE%D1%82%D0%B5%D0%BD%D0%BE%D0%BA.jpg";
         } else {
             posterEndpoint = Constants.IMAGE_STORAGE_ON_SERVER_BASE_URL + Constants.POSTER_SIZE + posterPath;
@@ -82,7 +84,7 @@ public class ImageDownloaderService extends IntentService {
         try {
             return new URL(posterEndpoint);
         } catch (MalformedURLException e) {
-            Logger.e(LOG_TAG, "Couldn't transform Uri to URL", e);
+            Logger.e(LOG_TAG, "Couldn't transform posterEndpoint from String to URL", e);
             return null;
         }
     }

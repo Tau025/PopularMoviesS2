@@ -20,10 +20,12 @@ import com.devtau.popularmoviess2.utility.Logger;
 import com.devtau.popularmoviess2.utility.Utility;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
 /**
+ * Фрагмент, показывающий подробности по выбранному фильму.
+ * Он может отображаться на отдельном экране или вместе со списком фильмов
+ *
  * A fragment representing a single Movie detail screen.
  * This fragment is either contained in a {@link MainActivity}
- * in two-pane mode (on tablets) or a {@link MovieDetailsActivity}
- * on handsets.
+ * in two-pane mode (on tablets) or a {@link MovieDetailsActivity} on handsets.
  */
 public class MovieDetailsFragment extends Fragment implements
         MovieDetailsViewInterface {

@@ -22,6 +22,8 @@ public class MyContentProvider extends ContentProvider {
 
     //задача QUERY_BUILDER в том чтобы сцепить все связанные таблицы воедино,
     //с тем чтобы дальше выполнять запросы к этой большой таблице
+    //QUERY_BUILDER job is to join all corresponding tables together
+    //so that we could query the big resulting table
     private static final SQLiteQueryBuilder QUERY_BUILDER;
     static{
         QUERY_BUILDER = new SQLiteQueryBuilder();
@@ -40,7 +42,8 @@ public class MyContentProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MySQLHelper.CONTENT_AUTHORITY;
 
-        // For each type of URI you want to add, create a corresponding code.
+        //Добавьте matcher для каждого шаблона URI, который вы собираетесь использовать
+        //For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, MoviesTable.TABLE_NAME, MOVIE);
         matcher.addURI(authority, MoviesTable.TABLE_NAME + "/*", MOVIE_BY_ID);
         return matcher;
@@ -71,7 +74,6 @@ public class MyContentProvider extends ContentProvider {
 
         switch(match) {
             case MOVIE: {
-//                normalizeDate(values);
                 long _id = db.insert(MoviesTable.TABLE_NAME, null, values);
                 if(_id > 0) {
                     returnUri = MoviesTable.buildMovieUri(_id);
@@ -130,7 +132,6 @@ public class MyContentProvider extends ContentProvider {
 
         switch (match) {
             case MOVIE: {
-//                normalizeDate(values);
                 rowsUpdated = db.update(MoviesTable.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
@@ -149,7 +150,8 @@ public class MyContentProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
 
-        // this makes delete all rows return the number of rows deleted
+        //Строка ниже позволит удалить все записи из этой таблицы
+        //This makes delete all rows return the number of rows deleted
         if (null == selection) selection = "1";
         switch (match) {
             case MOVIE: {
@@ -159,7 +161,6 @@ public class MyContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-        // Because a null deletes all rows
         if (rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -176,7 +177,6 @@ public class MyContentProvider extends ContentProvider {
                 int returnCount = 0;
                 try {
                     for (ContentValues value: values) {
-//                        normalizeDate(value);
                         long _id = db.insert(MoviesTable.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;

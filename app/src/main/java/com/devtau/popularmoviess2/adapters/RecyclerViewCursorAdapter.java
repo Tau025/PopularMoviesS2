@@ -2,39 +2,45 @@ package com.devtau.popularmoviess2.adapters;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-
+/**
+ * Поскольку в приложении может быть несколько списков, каждому будет соответствовать свой адаптер
+ * и все они должны наследовать от этого класса
+ * For an app can have several lists, each one should have their own adapter that will extend this one
+ */
 public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private Cursor cursor;
 
     public void swapCursor(final Cursor cursor) {
         this.cursor = cursor;
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return this.cursor != null
-                ? this.cursor.getCount()
-                : 0;
+        return (cursor != null) ? this.cursor.getCount() : 0;
     }
 
-    public Cursor getItem(final int position) {
-        if (this.cursor != null && !this.cursor.isClosed())
-            this.cursor.moveToPosition(position);
-
-        return this.cursor;
+    //Метод вернет курсор, выставленный в выбранную строку
+    //Provides single row from cursor tied to this list
+    public Cursor getItem(int position) {
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.moveToPosition(position);
+        }
+        return cursor;
     }
 
+    //Метод вернет весь курсор связанного списка
+    //Provides the whole cursor tied to this list
     public Cursor getCursor() {
-        return this.cursor;
+        return cursor;
     }
 
     @Override
-    public final void onBindViewHolder(final VH holder, final int position) {
-        final Cursor cursor = this.getItem(position);
-        this.onBindViewHolder(holder, cursor);
+    public final void onBindViewHolder(VH holder, int position) {
+        Cursor cursor = getItem(position);
+        onBindViewHolder(holder, cursor);
     }
 
-    public abstract void onBindViewHolder(final VH holder, final Cursor cursor);
+    public abstract void onBindViewHolder(VH holder, Cursor cursor);
 }

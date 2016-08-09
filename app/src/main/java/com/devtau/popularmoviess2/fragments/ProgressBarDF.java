@@ -11,6 +11,7 @@ import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.utility.Logger;
 /**
  * Фрагмент чтобы показать пользователю, что приложение делает важную работу
+ * Fragment shows to user that app is now busy doing important background work
  */
 public class ProgressBarDF extends DialogFragment {
     private static final String TAG = ProgressBarDF.class.getSimpleName();
@@ -25,7 +26,8 @@ public class ProgressBarDF extends DialogFragment {
         return dialog;
     }
 
-    //метод создаст новый диалог, если его еще нет на экране
+    //Метод создаст новый диалог, если его еще нет на экране
+    //Creates new dialog if there is none shown to user
     public static boolean show(FragmentManager manager) {
         ProgressBarDF dialog = (ProgressBarDF) manager.findFragmentByTag(TAG);
         if (dialog == null) {
@@ -38,7 +40,8 @@ public class ProgressBarDF extends DialogFragment {
         }
     }
 
-    //метод закроет дилог, если найдет его
+    //Метод закроет диалог, если найдет его
+    //Closes dialog if it is present
     public static boolean dismiss(FragmentManager manager){
         ProgressBarDF dialog = (ProgressBarDF) manager.findFragmentByTag(TAG);
         if (dialog != null) {

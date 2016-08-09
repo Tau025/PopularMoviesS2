@@ -12,15 +12,17 @@ import com.devtau.popularmoviess2.utility.Logger;
 /**
  * Этот диалог показываем пользователю, когда подключения к интернету нет.
  * Пользователь может включить сеть и повторить попытку подключения.
+ *
+ * Fragment shows to user that there is no internet connection.
+ * User can turn the connection on and retry connection.
  */
 public class NoInternetDF extends DialogFragment {
     private static final String TAG = NoInternetDF.class.getSimpleName();
-    private static NoInternetDFListener listener;
+    private NoInternetDFListener listener;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.no_internet_msg)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -34,18 +36,15 @@ public class NoInternetDF extends DialogFragment {
         return builder.create();
     }
 
-    //метод создаст новый диалог, если его еще нет на экране
+    //Метод создаст новый диалог, если его еще нет на экране
+    //Creates new dialog if there is none shown to user
     public static boolean show(FragmentManager manager, NoInternetDFListener listener) {
-        try {
-            NoInternetDF.listener = listener;
-        } catch (Exception e) {
-            Logger.e(TAG, "while initializing listener", e);
-        }
-
         NoInternetDF dialog = (NoInternetDF) manager.findFragmentByTag(TAG);
         if (dialog == null) {
 //            Logger.v(TAG, "NoInternetDF not found. going to create new one");
-            new NoInternetDF().show(manager, TAG);
+            dialog = new NoInternetDF();
+            dialog.listener = listener;
+            dialog.show(manager, TAG);
             return true;
         } else {
             Logger.e(TAG, "NoInternetDF already shown");

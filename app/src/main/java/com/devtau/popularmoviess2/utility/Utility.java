@@ -16,6 +16,7 @@ public abstract class Utility {
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public static final SimpleDateFormat theMovieDBDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+    //Использовать библиотеку Picasso было бы слишком просто
     //Picasso is too easy
     public static void loadImageToView(Context context, String imagePath, ImageView target) {
         if (TextUtils.isEmpty(imagePath) || "".equals(imagePath)) {
@@ -32,8 +33,10 @@ public abstract class Utility {
                 .into(target);
     }
 
+
     public static void setPosterImage(ImageView imageView, String posterPath) {
-        //проверим, нет ли сохраненной фотографии на устройстве
+        //Проверим, нет ли сохраненной фотографии на устройстве
+        //Check for a cached image on the device
         File cachedImage = FileManager.getImageFromCache(imageView.getContext(), posterPath);
         Logger.v(LOG_TAG, "In setPosterImage(). cachedImage is " + ((cachedImage != null) ? "valid" : "null"));
 
@@ -41,7 +44,8 @@ public abstract class Utility {
             Bitmap bitmap = BitmapFactory.decodeFile(cachedImage.getAbsolutePath());
             imageView.setImageBitmap(bitmap);
         } else {
-            //запустим запрос к серверу только если на устройстве нужной фотографии нет
+            //Запустим запрос к серверу только если на устройстве нужной фотографии нет
+            //Launch image downloader only if there is no cached image
             ImageDownloaderService.downloadImage(imageView.getContext(), posterPath);
         }
     }

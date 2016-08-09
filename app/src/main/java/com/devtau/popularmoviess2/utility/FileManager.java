@@ -30,12 +30,14 @@ public class FileManager {
         OutputStream outputStream = null;
 
         try {
-            //создадим новый файл для картинки
+            //Создадим новый файл для картинки
+            //Create new file for our image
             File file = new File(appDir, getImageFileName(posterPath));
             Logger.d(LOG_TAG, "Creating new file at: " + String.valueOf(file.getAbsolutePath()));
             outputStream = new FileOutputStream(file);
 
-            //сожмем картинку в JPEG и сохраним ее в созданный выше файл
+            //Сожмем картинку и сохраним ее в созданный выше файл
+            //Compress our image and save it to earlier created file
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();
             killFileWithDelay(file);
@@ -44,7 +46,7 @@ public class FileManager {
         } finally {
             try {
                 if(outputStream != null) {
-                    Logger.v(LOG_TAG, "Closing outputStream");
+//                    Logger.v(LOG_TAG, "Closing outputStream");
                     outputStream.close();
                 }
             } catch (IOException e) {
@@ -57,12 +59,12 @@ public class FileManager {
     private static String getFullAppDirectoryPath(Context context) {
         if(!"".equals(fullAppDirectoryPath)) return fullAppDirectoryPath;
 
-        //найдем на устройстве папку нашего приложения по умолчанию
-        //locate default app directory on device
+        //Найдем на устройстве папку нашего приложения по умолчанию
+        //Locate default app directory on device
         String baseDir = context.getApplicationInfo().dataDir;
 
-        //и создадим внутри нее папку кэша
-        //then create a cache directory inside of it
+        //И создадим внутри нее папку кэша
+        //Then create a cache directory inside of it
         File appDir = new File(baseDir, Constants.IMAGES_CACHE_DIR_NAME);
         if (!checkDirectoryExists(appDir)) {
             Logger.d(LOG_TAG, "Dir not found. Creating at: " + String.valueOf(appDir.getAbsolutePath()));
@@ -75,8 +77,8 @@ public class FileManager {
         return fullAppDirectoryPath;
     }
 
-    //метод нужен из-за того, что мы конвертируем все в jpg независимо от формата на сервере
-    //method is needed because we convert all images to jpeg regardless of their format on server
+    //Метод нужен из-за того, что мы конвертируем все в jpeg независимо от формата на сервере
+    //Method is needed because we convert all images to jpeg regardless of their format on server
     private static String getImageFileName(String posterPath) {
         String fileName = posterPath.substring(posterPath.lastIndexOf('/') + 1, posterPath.indexOf('.'));
         return fileName + Constants.CACHED_IMAGE_EXTENSION;
@@ -90,7 +92,8 @@ public class FileManager {
         return file.exists() && file.isFile();
     }
 
-    //определим срок жизни фотографии в кеше на устройстве
+    //Определим срок жизни фотографии в кеше на устройстве
+    //Define lifetime of image in the device cache
     private static void killFileWithDelay(final File file) {
         new Handler().postDelayed(new Runnable() {
             @Override

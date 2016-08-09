@@ -9,12 +9,15 @@ import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.utility.Utility;
-
+/**
+ * Адаптер списка фильмов
+ * Adapter for a list of movies
+ */
 public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesListCursorAdapter.ViewHolder>
         implements View.OnClickListener {
-    private OnItemClickListener listener;
+    private ListItemClickListener listener;
 
-    public MoviesListCursorAdapter(OnItemClickListener listener) {
+    public MoviesListCursorAdapter(ListItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -39,7 +42,7 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
             int position = recyclerView.getChildLayoutPosition(view);
             if (position != RecyclerView.NO_POSITION) {
                 Cursor cursor = getItem(position);
-                listener.onItemClicked(cursor);
+                listener.onListItemClicked(cursor);
             }
         }
     }
@@ -57,7 +60,7 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClicked(Cursor cursor);
+    public interface ListItemClickListener {
+        void onListItemClicked(Cursor cursor);
     }
 }
