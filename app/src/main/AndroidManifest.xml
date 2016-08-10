@@ -65,7 +65,11 @@
         </service>
 
         <service
-            android:name=".utility.ImageDownloaderService"
+            android:name=".services.ImageDownloaderService"
+            android:exported="false"/>
+
+        <service
+            android:name=".services.TrailersDownloaderService"
             android:exported="false"/>
     </application>
 </manifest>

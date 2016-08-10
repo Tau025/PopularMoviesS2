@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.utility;
+package com.devtau.popularmoviess2.services;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import com.devtau.popularmoviess2.utility.Constants;
+import com.devtau.popularmoviess2.utility.FileManager;
+import com.devtau.popularmoviess2.utility.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;

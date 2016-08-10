@@ -48,6 +48,7 @@ public class MovieDetailsFragment extends Fragment implements
             long movieId = getArguments().getLong(MOVIE_ID_EXTRA);
             presenter = new MovieDetailsPresenter(this, movieId);
             presenter.restartLoader();
+            presenter.downloadTrailers();
         } else {
             Logger.e(LOG_TAG, "MOVIE_ID_EXTRA not found");
         }
@@ -90,6 +91,20 @@ public class MovieDetailsFragment extends Fragment implements
         tv_plot_synopsis.setText(movie.getPlotSynopsis());
         Utility.setPosterImage(iv_poster, movie.getPosterPath());
         btn_is_favorite.setChecked(movie.isFavorite());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //возобновим регистрацию широковещательного приёмника всякий раз при разворачивании приложения
+        presenter.registerBroadCastReceiver();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //отменим регистрацию широковещательного приёмника всякий раз при сворачивании приложения
+        presenter.unregisterBroadCastReceiver();
     }
 
     @Override

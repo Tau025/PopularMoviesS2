@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
+import com.devtau.popularmoviess2.services.ImageDownloaderService;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.text.SimpleDateFormat;
