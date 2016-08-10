@@ -28,6 +28,7 @@ public class MyContentProvider extends ContentProvider {
     static{
         QUERY_BUILDER = new SQLiteQueryBuilder();
         QUERY_BUILDER.setTables(MoviesTable.TABLE_NAME);
+//        Logger.v(LOG_TAG, "QUERY_BUILDER: " + String.valueOf(QUERY_BUILDER.getTables()));
     }
 
 
@@ -67,7 +68,7 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        Logger.d(LOG_TAG, "uri: " + String.valueOf(uri));
+        Logger.d(LOG_TAG, "In insert(). uri is: " + String.valueOf(uri));
 
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
@@ -172,11 +173,11 @@ public class MyContentProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case MOVIE:
+            case MOVIE: {
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
-                    for (ContentValues value: values) {
+                    for (ContentValues value : values) {
                         long _id = db.insert(MoviesTable.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
@@ -188,18 +189,18 @@ public class MyContentProvider extends ContentProvider {
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
+            }
             default:
                 return super.bulkInsert(uri, values);
         }
     }
 
     private Cursor getMovieById(Uri uri, String[] projection, String sortOrder) {
-        String orderIdString = MoviesTable.getIdFromUri(uri);
-
+        String movieIdString = MoviesTable.getIdFromUri(uri);
         return QUERY_BUILDER.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 MoviesTable.TABLE_NAME + "." + BaseColumns._ID + " = ? ",
-                new String[]{orderIdString},
+                new String[]{movieIdString},
                 null,
                 null,
                 sortOrder

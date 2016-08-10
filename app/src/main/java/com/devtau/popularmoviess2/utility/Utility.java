@@ -38,7 +38,7 @@ public abstract class Utility {
         //Проверим, нет ли сохраненной фотографии на устройстве
         //Check for a cached image on the device
         File cachedImage = FileManager.getImageFromCache(imageView.getContext(), posterPath);
-        Logger.v(LOG_TAG, "In setPosterImage(). cachedImage is " + ((cachedImage != null) ? "valid" : "null"));
+//        Logger.v(LOG_TAG, "In setPosterImage(). cachedImage is " + ((cachedImage != null) ? "valid" : "null"));
 
         if(cachedImage != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(cachedImage.getAbsolutePath());

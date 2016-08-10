@@ -33,7 +33,7 @@ public class FileManager {
             //Создадим новый файл для картинки
             //Create new file for our image
             File file = new File(appDir, getImageFileName(posterPath));
-            Logger.d(LOG_TAG, "Creating new file at: " + String.valueOf(file.getAbsolutePath()));
+//            Logger.d(LOG_TAG, "Creating new file at: " + String.valueOf(file.getAbsolutePath()));
             outputStream = new FileOutputStream(file);
 
             //Сожмем картинку и сохраним ее в созданный выше файл
@@ -67,7 +67,7 @@ public class FileManager {
         //Then create a cache directory inside of it
         File appDir = new File(baseDir, Constants.IMAGES_CACHE_DIR_NAME);
         if (!checkDirectoryExists(appDir)) {
-            Logger.d(LOG_TAG, "Dir not found. Creating at: " + String.valueOf(appDir.getAbsolutePath()));
+//            Logger.d(LOG_TAG, "Dir not found. Creating at: " + String.valueOf(appDir.getAbsolutePath()));
             if(!appDir.mkdirs()) {
                 Logger.e(LOG_TAG, "Failed to create image cache directory");
             }

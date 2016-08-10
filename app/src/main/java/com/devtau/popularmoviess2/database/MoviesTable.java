@@ -21,13 +21,13 @@ public abstract class MoviesTable {
     public static final String IS_FAVORITE = "isFavorite";
 
     public static final String FIELDS = MySQLHelper.PRIMARY_KEY
-            + TITLE + " TEXT, "
-            + POSTER_PATH + " TEXT, "
-            + PLOT_SYNOPSIS + " TEXT, "
-            + USER_RATING + " REAL, "
-            + POPULARITY + " REAL, "
-            + RELEASE_DATE + " TEXT, "
-            + IS_FAVORITE + " INTEGER";
+            + TITLE + " TEXT NOT NULL, "
+            + POSTER_PATH + " TEXT NOT NULL, "
+            + PLOT_SYNOPSIS + " TEXT NOT NULL, "
+            + USER_RATING + " REAL NOT NULL, "
+            + POPULARITY + " REAL NOT NULL, "
+            + RELEASE_DATE + " TEXT NOT NULL, "
+            + IS_FAVORITE + " INTEGER NOT NULL";
 
     public static final Uri CONTENT_URI =
             MySQLHelper.BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();

@@ -104,7 +104,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             String jsonString = buffer.toString();
-            List<Movie> parsedMovies = parseJson(jsonString);
+            List<Movie> parsedMovies = parseMoviesListJSON(jsonString);
+            Logger.d(LOG_TAG, "In onPerformSync(). parsedMovies.size(): " + String.valueOf(parsedMovies.size()));
             updateOrCreateMoviesList(parsedMovies);
 
         } catch (IOException e) {
@@ -127,7 +128,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     //Метод распарсит JSON строку и вернет List фильмов, перечисленных в предоставленной JSON строке
     //Parses JSON string to a List of Movies
-    private List<Movie> parseJson(String JSONString) throws JSONException {
+    private List<Movie> parseMoviesListJSON(String JSONString) throws JSONException {
         JSONObject serverAnswer = new JSONObject(JSONString);
         JSONArray moviesJsonArray = serverAnswer.getJSONArray(Constants.JSON_RESULTS);
 
@@ -180,7 +181,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private int updateOrCreateMovie(Movie parsedMovie) {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(MoviesTable.buildMovieUri(parsedMovie.getId()), null, null, null, null);
-//        DatabaseUtils.dumpCursor(cursor);
+        DatabaseUtils.dumpCursor(cursor);
 
         if(cursor != null && cursor.getCount() != 0) {
             cursor.moveToFirst();

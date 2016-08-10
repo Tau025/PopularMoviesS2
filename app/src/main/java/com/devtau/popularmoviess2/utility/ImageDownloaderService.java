@@ -45,7 +45,7 @@ public class ImageDownloaderService extends IntentService {
 
     @Nullable
     private Bitmap handleActionDownloadImage(String posterPath) {
-        Logger.v(LOG_TAG, "Started ImageDownloaderService");
+//        Logger.v(LOG_TAG, "Started ImageDownloaderService");
         InputStream inputStream = null;
         try {
             URL url = getUrlFromPosterPath(posterPath);
