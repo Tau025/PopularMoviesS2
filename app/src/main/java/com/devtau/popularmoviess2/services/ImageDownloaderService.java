@@ -6,13 +6,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import com.devtau.popularmoviess2.utility.Constants;
 import com.devtau.popularmoviess2.utility.FileManager;
 import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.utility.NetworkHelper;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 /**
  * Сервис для асинхронной загрузки изображений с нашего сервера в папку кэша на устройстве
@@ -51,7 +49,7 @@ public class ImageDownloaderService extends IntentService {
 //        Logger.v(LOG_TAG, "Started ImageDownloaderService");
         InputStream inputStream = null;
         try {
-            URL url = getUrlFromPosterPath(posterPath);
+            URL url = NetworkHelper.getPosterPathUrl(posterPath);
             if(url != null) {
                 inputStream = url.openConnection().getInputStream();
                 return BitmapFactory.decodeStream(inputStream);
@@ -71,24 +69,6 @@ public class ImageDownloaderService extends IntentService {
             } catch (IOException e) {
                 Logger.e(LOG_TAG, "While closing inputStream", e);
             }
-        }
-    }
-
-    @Nullable
-    private URL getUrlFromPosterPath(String posterPath) {
-        String posterEndpoint;
-        if (TextUtils.isEmpty(posterPath) || "".equals(posterPath)) {
-            Logger.e(LOG_TAG, "No valid posterPath found in movie. Replacing with kitty to keep user happy");
-            posterEndpoint = "http://kogteto4ka.ru/wp-content/uploads/2012/04/%D0%9A%D0%BE%D1%82%D0%B5%D0%BD%D0%BE%D0%BA.jpg";
-        } else {
-            posterEndpoint = Constants.IMAGE_STORAGE_ON_SERVER_BASE_URL + Constants.POSTER_SIZE + posterPath;
-        }
-
-        try {
-            return new URL(posterEndpoint);
-        } catch (MalformedURLException e) {
-            Logger.e(LOG_TAG, "Couldn't transform posterEndpoint from String to URL", e);
-            return null;
         }
     }
 }
