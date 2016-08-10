@@ -28,7 +28,6 @@ import com.devtau.popularmoviess2.view.MoviesListViewInterface;
  */
 public class MoviesListPresenter implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        SyncAdapter.SyncAdapterListener,
         NoInternetDF.NoInternetDFListener {
     private static final String LOG_TAG = MoviesListPresenter.class.getSimpleName();
     private static final int LOADER_RESULTS = 115297;
@@ -43,7 +42,7 @@ public class MoviesListPresenter implements
 
     public void sendRequestToServer() {
         if (checkIsOnline()){
-            SyncAdapter.initializeSyncAdapter(view.getContext(), this);
+            SyncAdapter.initializeSyncAdapter(view.getContext());
         } else {
             view.showNoInternetDF();
         }
@@ -120,15 +119,8 @@ public class MoviesListPresenter implements
 
     public String toggleSortOrder() {
         sortBy = SortBy.toggle(sortBy);
-        SyncAdapter.syncImmediately(view.getContext());
         restartLoader();
         return sortBy.getDescription(view.getContext());
-    }
-
-    //SyncAdapterListener
-    @Override
-    public SortBy getSortBy() {
-        return sortBy;
     }
 
 
