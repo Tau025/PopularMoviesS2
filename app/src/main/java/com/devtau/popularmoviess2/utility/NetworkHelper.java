@@ -72,8 +72,36 @@ public class NetworkHelper {
                 .appendPath("3")
                 .appendPath("movie")
                 .appendPath(String.valueOf(movieId))
-                .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY_VALUE)
-                .appendQueryParameter("append_to_response", "trailers");
+                .appendPath("videos")
+                .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY_VALUE);
+
+        try {
+            return new URL(builder.build().toString());
+        } catch (MalformedURLException e) {
+            Logger.e(LOG_TAG, "Couldn't transform trailersEndpoint from String to URL", e);
+            return null;
+        }
+    }
+
+
+    @Nullable
+    public static URL getReviewsUrl(long movieId) {
+        if (movieId == 0) {
+            Logger.e(LOG_TAG, "movieId not valid");
+            return null;
+        }
+
+        //Подготовим URL для запроса к серверу themoviedb.org
+        //Construct the URL for themoviedb.org query
+        Uri.Builder builder = new Uri.Builder();
+        //        https://api.themoviedb.org/3/movie/550?api_key=###&append_to_response=releases,trailers
+        builder.scheme("http")
+                .authority("api.themoviedb.org")
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(String.valueOf(movieId))
+                .appendPath("reviews")
+                .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY_VALUE);
 
         try {
             return new URL(builder.build().toString());
@@ -219,15 +247,14 @@ public class NetworkHelper {
     public static ArrayList<Trailer> parseTrailersListJSON(String JSONString) {
         try {
             JSONObject serverAnswer = new JSONObject(JSONString);
-            JSONObject trailersJSONObject = serverAnswer.getJSONObject(Constants.JSON_TRAILERS);
-            JSONArray trailersJSONArray = trailersJSONObject.getJSONArray(Constants.JSON_YOUTUBE);
+            JSONArray trailersJSONArray = serverAnswer.getJSONArray(Constants.JSON_RESULTS);
 
             ArrayList<Trailer> trailersList = new ArrayList<>();
             for (int i = 0; i < trailersJSONArray.length(); i++) {
                 JSONObject JSONTrailer = trailersJSONArray.getJSONObject(i);
                 String source = JSONTrailer.getString(Constants.JSON_TRAILER_SOURCE);
                 String name = JSONTrailer.getString(Constants.JSON_TRAILER_NAME);
-                String size = JSONTrailer.getString(Constants.JSON_TRAILER_SIZE);
+                int size = JSONTrailer.getInt(Constants.JSON_TRAILER_SIZE);
                 String type = JSONTrailer.getString(Constants.JSON_TRAILER_TYPE);
 
                 //Соберем из всех подготовленных компонентов объект класса Trailer

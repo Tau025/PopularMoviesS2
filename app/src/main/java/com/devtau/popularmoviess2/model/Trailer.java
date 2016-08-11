@@ -9,10 +9,10 @@ import android.os.Parcelable;
 public class Trailer implements Parcelable {
     private String source;
     private String name;
-    private String size;
+    private int size;
     private String type;
 
-    public Trailer(String source, String name, String size, String type) {
+    public Trailer(String source, String name, int size, String type) {
         this.source = source;
         this.name = name;
         this.size = size;
@@ -22,7 +22,7 @@ public class Trailer implements Parcelable {
     public Trailer(Parcel parcel) {
         source = parcel.readString();
         name = parcel.readString();
-        size = parcel.readString();
+        size = parcel.readInt();
         type = parcel.readString();
     }
 
@@ -37,7 +37,7 @@ public class Trailer implements Parcelable {
     }
 
     public String getTypeSize() {
-        return type + " - " + size;
+        return type + " - " + String.valueOf(size);
     }
 
 
@@ -61,7 +61,7 @@ public class Trailer implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(source);
         parcel.writeString(name);
-        parcel.writeString(size);
+        parcel.writeInt(size);
         parcel.writeString(type);
     }
 }

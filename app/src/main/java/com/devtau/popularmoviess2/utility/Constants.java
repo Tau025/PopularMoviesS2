@@ -22,11 +22,9 @@ public abstract class Constants {
     public static final String JSON_POPULARITY = "popularity";
     public static final String JSON_RELEASE_DATE = "release_date";
 
-    public static final String JSON_TRAILERS = "trailers";
-    public static final String JSON_YOUTUBE = "youtube";
     public static final String JSON_TRAILER_NAME = "name";
     public static final String JSON_TRAILER_SIZE = "size";
-    public static final String JSON_TRAILER_SOURCE = "source";
+    public static final String JSON_TRAILER_SOURCE = "key";
     public static final String JSON_TRAILER_TYPE = "type";
 
     //    /data/data/com.devtau.popularmoviess2/ImageCache/?????????????.jpg

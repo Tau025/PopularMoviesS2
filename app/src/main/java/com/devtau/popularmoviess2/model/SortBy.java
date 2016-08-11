@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.utility.Constants;
-
 import java.util.ArrayList;
 /**
  * Перечисление для вариантов сортировки списка фильмов
@@ -53,10 +52,10 @@ public enum SortBy {
 
 
     public static SortBy getById(long id){
-        if(id == MOST_POPULAR.id) return MOST_POPULAR;
-        else if(id == TOP_RATED.id) return TOP_RATED;
-        else if(id == IS_FAVORITE.id) return IS_FAVORITE;
-        else return Constants.DEFAULT_SORT_BY;
+        if(id == MOST_POPULAR.id)   return MOST_POPULAR;
+        if(id == TOP_RATED.id)      return TOP_RATED;
+        if(id == IS_FAVORITE.id)    return IS_FAVORITE;
+        return Constants.DEFAULT_SORT_BY;
     }
 
     public static ArrayList<SortBy> getAllEnumItems() {
