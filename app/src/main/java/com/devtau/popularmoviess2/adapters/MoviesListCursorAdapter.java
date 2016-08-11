@@ -24,7 +24,7 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item_movies, parent, false);
         view.setOnClickListener(this);
         return new ViewHolder(view);
     }

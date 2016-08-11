@@ -36,14 +36,9 @@ public class Trailer implements Parcelable {
         return name;
     }
 
-    public String getSize() {
-        return size;
+    public String getTypeSize() {
+        return type + " - " + size;
     }
-
-    public String getType() {
-        return type;
-    }
-
 
 
     //Parcelable methods

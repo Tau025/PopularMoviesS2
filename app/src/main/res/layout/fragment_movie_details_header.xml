@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="100dp"
+        android:textColor="@android:color/white"
+        android:textSize="34sp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--Implementing data-binding on ImageView requires deep MVVM pattern with BindingAdapter.
+        So here we have a good old findViewById.-->
+        <ImageView
+            android:id="@+id/iv_poster"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_width="200dp"
+            android:layout_height="300dp"
+            android:contentDescription="@string/movie_thumb" />
+
+        <TextView
+            android:id="@+id/tv_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_poster"
+            android:layout_toRightOf="@+id/iv_poster"
+            android:layout_toEndOf="@+id/iv_poster"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tv_user_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_release_date"
+            android:layout_alignLeft="@+id/tv_release_date"
+            android:layout_alignStart="@+id/tv_release_date"
+            android:layout_marginTop="24dp"
+            android:textStyle="bold" />
+
+        <!--Implementing two-way data-binding on ToggleButton requires deep MVVM pattern.
+        So here we have a good old findViewById.-->
+        <ToggleButton
+            android:id="@+id/btn_is_favorite"
+            android:button="@android:drawable/btn_star"
+            android:background="@android:color/transparent"
+            android:textOn=""
+            android:textOff=""
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@+id/tv_user_rating"
+            android:layout_alignLeft="@+id/tv_release_date"
+            android:layout_alignStart="@+id/tv_release_date"
+            android:layout_marginTop="12dp"
+            android:gravity="center" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_plot_synopsis"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+</LinearLayout>

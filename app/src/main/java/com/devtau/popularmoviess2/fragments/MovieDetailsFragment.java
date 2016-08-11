@@ -1,24 +1,31 @@
 package com.devtau.popularmoviess2.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.activities.MovieDetailsActivity;
 import com.devtau.popularmoviess2.activities.MainActivity;
+import com.devtau.popularmoviess2.adapters.TrailersListAdapter;
 import com.devtau.popularmoviess2.model.Movie;
+import com.devtau.popularmoviess2.model.Trailer;
 import com.devtau.popularmoviess2.presenters.MovieDetailsPresenter;
 import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.utility.NetworkHelper;
 import com.devtau.popularmoviess2.utility.Utility;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
+import java.util.ArrayList;
 /**
  * Фрагмент, показывающий подробности по выбранному фильму.
  * Он может отображаться на отдельном экране или вместе со списком фильмов
@@ -35,6 +42,7 @@ public class MovieDetailsFragment extends Fragment implements
     private TextView tv_title, tv_release_date, tv_user_rating, tv_plot_synopsis;
     private ImageView iv_poster;
     private ToggleButton btn_is_favorite;
+    private ListView trailersListView;
 
     private MovieDetailsPresenter presenter;
 
@@ -56,23 +64,47 @@ public class MovieDetailsFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
-        initControls(view);
-        return view;
+        View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+
+        //Поскольку мы используем ListView с хедером, перед тем, как искать ссылки на отдельные вью,
+        //хедер нужно надуть. Для быстрого отображения только хедера, пока лист трейлеров еще не загрузился
+        //мы инициируем ListView пустым ArrayList, и переназначаем его после загрузки трейлеров
+        //Hence we use ListView with header, we have to inflate header before we can access links
+        //to it's children views. In order to speed up loading of whole fragment, first we add
+        //an empty ArrayList which will be replaced on trailers list load finished
+        trailersListView = (ListView) rootView.findViewById(R.id.movieDetailsListView);;
+        trailersListView.addHeaderView(inflater.inflate(R.layout.fragment_movie_details_header, (ViewGroup) rootView, false));
+        initControls(rootView);
+        populateTrailersList(new ArrayList<Trailer>());
+
+        return rootView;
     }
 
-    private void initControls(View view) {
-        tv_title = (TextView) view.findViewById(R.id.tv_title);
-        tv_release_date = (TextView) view.findViewById(R.id.tv_release_date);
-        tv_user_rating = (TextView) view.findViewById(R.id.tv_user_rating);
-        tv_plot_synopsis = (TextView) view.findViewById(R.id.tv_plot_synopsis);
-        iv_poster = (ImageView) view.findViewById(R.id.iv_poster);
-        btn_is_favorite = (ToggleButton) view.findViewById(R.id.btn_is_favorite);
+    private void initControls(View rootView) {
+        tv_title = (TextView) rootView.findViewById(R.id.tv_title);
+        tv_release_date = (TextView) rootView.findViewById(R.id.tv_release_date);
+        tv_user_rating = (TextView) rootView.findViewById(R.id.tv_user_rating);
+        tv_plot_synopsis = (TextView) rootView.findViewById(R.id.tv_plot_synopsis);
+        iv_poster = (ImageView) rootView.findViewById(R.id.iv_poster);
+        btn_is_favorite = (ToggleButton) rootView.findViewById(R.id.btn_is_favorite);
 
         btn_is_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.onFavoriteClick();
+            }
+        });
+    }
+
+    @Override
+    public void populateTrailersList(ArrayList<Trailer> trailersList) {
+        trailersListView.setAdapter(new TrailersListAdapter(getContext(), R.layout.list_item_trailers, trailersList));
+        trailersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String trailerSource = ((Trailer) adapterView.getItemAtPosition(position)).getSource();
+                view.getContext().startActivity(new Intent(Intent.ACTION_VIEW,
+                        NetworkHelper.getTrailerYoutubeUri(trailerSource)));
             }
         });
     }

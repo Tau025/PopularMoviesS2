@@ -9,6 +9,7 @@ public abstract class Constants {
     public static final SortBy DEFAULT_SORT_BY = SortBy.MOST_POPULAR;
     public static final String MY_BROADCAST_ACTION = "com.devtau.popularmoviess2.SENT_BROADCAST";
     public static final String TRAILERS_LIST_EXTRA = "TRAILERS_LIST_EXTRA";
+    public static final String YOUTUBE_TRAILER_THUMB = "http://img.youtube.com/vi/$/0.jpg";
 
     //Имена JSON объектов, которые мы извлекаем из ответа сервера themoviedb
     //These are the names of the JSON objects that need to be extracted.

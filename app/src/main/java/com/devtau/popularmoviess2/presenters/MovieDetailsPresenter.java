@@ -43,11 +43,12 @@ public class MovieDetailsPresenter implements
         return new BroadcastReceiver(){
             @Override
             public void onReceive(Context context, Intent intent) {
-                //на выполнение всего метода у нас есть 10 секунд, иначе появится ANR
+                //На выполнение всего метода у нас есть 10 секунд, иначе появится ANR
+                //To finish all operations in this method we have 10 seconds before ANR
                 if(intent.getAction() == null && Constants.MY_BROADCAST_ACTION.equals(intent.getAction())
                         && intent.hasExtra(Intent.EXTRA_TEXT)) return;
                 ArrayList<Trailer> trailersList = intent.getParcelableArrayListExtra(Constants.TRAILERS_LIST_EXTRA);
-                view.showMessage(String.valueOf(trailersList.size()));
+                view.populateTrailersList(trailersList);
             }
         };
     }

@@ -105,6 +105,22 @@ public class NetworkHelper {
 
 
     @Nullable
+    public static Uri getTrailerYoutubeUri(String trailerSource) {
+        if (TextUtils.isEmpty(trailerSource) || "".equals(trailerSource)) {
+            Logger.e(LOG_TAG, "trailerSource not valid");
+            return null;
+        }
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.youtube.com")
+                .appendPath("watch")
+                .appendQueryParameter("v", trailerSource);
+        return Uri.parse(builder.build().toString());
+    }
+
+
+    @Nullable
     public static String requestJSONStringFromServer(URL requestUrl) {
         //urlConnection и reader должы объявляться вне try/catch блока,
         //чтобы их можно было закрыть в блоке finally
