@@ -7,14 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.devtau.popularmoviess2.adapters.MoviesListCursorAdapter;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.fragments.NoInternetDF;
 import com.devtau.popularmoviess2.fragments.ProgressBarDF;
+import com.devtau.popularmoviess2.model.SortBy;
 import com.devtau.popularmoviess2.presenters.MoviesListPresenter;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
+import com.devtau.popularmoviess2.adapters.SortBySpinnerAdapter;
+import java.util.ArrayList;
 /**
  * Главная активность приложения, показывающая список фильмов и дополняющая его подробностями
  * по выбранному фильму, если позволяет место на экране устройства или запускающая вторую активность
@@ -54,17 +59,24 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+        ArrayList<SortBy> list = SortBy.getAllEnumItems();
+        SortBySpinnerAdapter adapter = new SortBySpinnerAdapter(this, list);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_order_toggle:
-                item.setTitle(presenter.toggleSortOrder());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        Spinner spinner = (Spinner) menu.findItem(R.id.sort_order_spinner).getActionView();
+        spinner.setAdapter(adapter);
+        spinner.setSelection(list.indexOf(presenter.getSortBy()));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                SortBy sortBy = (SortBy) adapterView.getItemAtPosition(position);
+                presenter.switchSortBy(sortBy);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {/*NOP*/}
+        });
+        return true;
     }
 
     @Override

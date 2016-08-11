@@ -107,7 +107,7 @@ public class MyContentProvider extends ContentProvider {
                         selectionArgs,
                         null,
                         null,
-                        sortOrder + " LIMIT 20"
+                        sortOrder
                 );
                 break;
             }

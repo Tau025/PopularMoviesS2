@@ -10,10 +10,13 @@
         Правильный API-key должен состоять из ровно 32 символов.</string>
     <string name="also">\n\nтакже\n\n</string>
 
-    <string name="no_internet_msg">Нет подключения к сети интернет =(\nПопробовать снова?</string>
+    <string name="no_internet_msg">Нет подключения к сети интернет =(
+        \nТрейлеры и рецензии недоступны.
+        \nПопробовать переподключиться?</string>
     <string name="movie_load_failed_msg">Не удалось показать подробности по этому фильму</string>
 
     <string name="sort_order_most_popular">Самые популярные</string>
     <string name="sort_order_top_rated">Высший рейтинг</string>
+    <string name="sort_order_favorite">Любимые</string>
     <string name="online_msg">В сети!</string>
 </resources>

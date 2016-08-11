@@ -7,12 +7,15 @@
     <string name="API_key_length_is_bad">API-key found, but it seems to be too short or too long.\nValid API-key should be 32 chars long.</string>
     <string name="also">\n\nalso\n\n</string>
 
-    <string name="no_internet_msg">No internet =(\nTry again?</string>
+    <string name="no_internet_msg">No internet =(
+        \nTrailers and reviews are now unavailable.
+        \nTry to reconnect?</string>
     <string name="movie_load_failed_msg">Could not load details on the selected movie</string>
     <string name="online_msg">Online!</string>
 
     <string name="sort_order_most_popular">Most popular</string>
     <string name="sort_order_top_rated">Top rated</string>
+    <string name="sort_order_favorite">Favorite</string>
     <string name="sort_order_most_popular_key" translatable="false">popular</string>
     <string name="sort_order_top_rated_key" translatable="false">top_rated</string>
 

@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/sort_order_toggle"
+        android:id="@+id/sort_order_spinner"
         android:title="@string/sort_order_most_popular"
-        app:showAsAction="ifRoom|withText" />
+        app:showAsAction="ifRoom|withText"
+        app:actionViewClass="android.widget.Spinner"/>
 </menu>

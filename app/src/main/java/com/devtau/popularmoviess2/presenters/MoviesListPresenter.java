@@ -2,11 +2,13 @@ package com.devtau.popularmoviess2.presenters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -30,6 +32,7 @@ public class MoviesListPresenter implements
         LoaderManager.LoaderCallbacks<Cursor>,
         NoInternetDF.NoInternetDFListener {
     private static final String LOG_TAG = MoviesListPresenter.class.getSimpleName();
+    private static final String SELECTED_SORT_BY_TAG = "SELECTED_SORT_BY_TAG";
     private static final int LOADER_RESULTS = 115297;
     private MoviesListViewInterface view;
     private int retryConnectionsCounter;
@@ -38,6 +41,7 @@ public class MoviesListPresenter implements
 
     public MoviesListPresenter(MoviesListViewInterface view) {
         this.view = view;
+        sortBy = getSortBy();
     }
 
     public void sendRequestToServer() {
@@ -117,10 +121,17 @@ public class MoviesListPresenter implements
         }
     }
 
-    public String toggleSortOrder() {
-        sortBy = SortBy.toggle(sortBy);
+    public void switchSortBy(SortBy sortBy) {
+        this.sortBy = sortBy;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        prefs.edit().putLong(SortBy.SORT_BY_EXTRA, sortBy.getId()).apply();
         restartLoader();
-        return sortBy.getDescription(view.getContext());
+    }
+
+    public SortBy getSortBy() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+        long sortById = prefs.getLong(SortBy.SORT_BY_EXTRA, Constants.DEFAULT_SORT_BY.getId());
+        return SortBy.getById(sortById);
     }
 
 
@@ -129,9 +140,14 @@ public class MoviesListPresenter implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_RESULTS:
-                String sortOrder = sortBy.getDatabaseID() + " DESC";
-                return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI,
-                        null, null, null, sortOrder);
+                if(sortBy == SortBy.MOST_POPULAR || sortBy == SortBy.TOP_RATED) {
+                    String sortOrder = sortBy.getDatabaseID() + " DESC LIMIT 20";
+                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI,
+                            null, null, null, sortOrder);
+                } else if(sortBy == SortBy.IS_FAVORITE) {
+                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI,
+                            null, MoviesTable.IS_FAVORITE + "=?", new String[]{"1"}, null);
+                }
         }
         return null;
     }
