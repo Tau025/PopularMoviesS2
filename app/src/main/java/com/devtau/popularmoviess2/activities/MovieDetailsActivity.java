@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.R;
+import com.devtau.popularmoviess2.utility.Constants;
 import com.devtau.popularmoviess2.utility.Logger;
 /**
  * Активность, содержащая контейнер для фрагмента {@link MovieDetailsFragment}
@@ -32,8 +33,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putLong(MovieDetailsFragment.MOVIE_ID_EXTRA,
-                    getIntent().getLongExtra(MovieDetailsFragment.MOVIE_ID_EXTRA, 0));
+            arguments.putLong(Constants.MOVIE_ID_EXTRA,
+                    getIntent().getLongExtra(Constants.MOVIE_ID_EXTRA, 0));
             MovieDetailsFragment fragment = new MovieDetailsFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

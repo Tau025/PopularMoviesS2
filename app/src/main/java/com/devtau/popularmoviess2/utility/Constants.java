@@ -9,6 +9,7 @@ public abstract class Constants {
     public static final SortBy DEFAULT_SORT_BY = SortBy.MOST_POPULAR;
     public static final String MY_BROADCAST_ACTION = "com.devtau.popularmoviess2.SENT_BROADCAST";
     public static final String TRAILERS_LIST_EXTRA = "TRAILERS_LIST_EXTRA";
+    public static final String REVIEWS_LIST_EXTRA = "REVIEWS_LIST_EXTRA";
     public static final String YOUTUBE_TRAILER_THUMB = "http://img.youtube.com/vi/$/0.jpg";
 
     //Имена JSON объектов, которые мы извлекаем из ответа сервера themoviedb
@@ -27,6 +28,9 @@ public abstract class Constants {
     public static final String JSON_TRAILER_SOURCE = "key";
     public static final String JSON_TRAILER_TYPE = "type";
 
+    public static final String JSON_REVIEW_AUTHOR = "author";
+    public static final String JSON_REVIEW_CONTENT = "content";
+
     //    /data/data/com.devtau.popularmoviess2/ImageCache/?????????????.jpg
     public static final String IMAGES_CACHE_DIR_NAME = "ImageCache";
     public static final String CACHED_IMAGE_EXTENSION = ".jpg";
@@ -42,6 +46,7 @@ public abstract class Constants {
     public static final int SYNC_INTERVAL = 60 * 180;//3 hours
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
 
+    public static final String MOVIE_ID_EXTRA = "movieIdExtra";
     public static final String API_KEY_PARAM = "api_key";
     public static final String API_KEY_VALUE = "dfd949b3dbeb097ef26ee09ef7299615";
 }

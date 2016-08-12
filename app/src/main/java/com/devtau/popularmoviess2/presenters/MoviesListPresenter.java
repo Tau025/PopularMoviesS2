@@ -32,7 +32,6 @@ public class MoviesListPresenter implements
         LoaderManager.LoaderCallbacks<Cursor>,
         NoInternetDF.NoInternetDFListener {
     private static final String LOG_TAG = MoviesListPresenter.class.getSimpleName();
-    private static final String SELECTED_SORT_BY_TAG = "SELECTED_SORT_BY_TAG";
     private static final int LOADER_RESULTS = 115297;
     private MoviesListViewInterface view;
     private int retryConnectionsCounter;
@@ -107,7 +106,7 @@ public class MoviesListPresenter implements
             Logger.v(LOG_TAG, "twoPane: " + String.valueOf(twoPane));
             if (twoPane) {
                 Bundle arguments = new Bundle();
-                arguments.putLong(MovieDetailsFragment.MOVIE_ID_EXTRA, movieId);
+                arguments.putLong(Constants.MOVIE_ID_EXTRA, movieId);
                 MovieDetailsFragment fragment = new MovieDetailsFragment();
                 fragment.setArguments(arguments);
                 ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
@@ -115,7 +114,7 @@ public class MoviesListPresenter implements
                         .commit();
             } else {
                 Intent intent = new Intent(view.getContext(), MovieDetailsActivity.class);
-                intent.putExtra(MovieDetailsFragment.MOVIE_ID_EXTRA, movieId);
+                intent.putExtra(Constants.MOVIE_ID_EXTRA, movieId);
                 view.getContext().startActivity(intent);
             }
         }

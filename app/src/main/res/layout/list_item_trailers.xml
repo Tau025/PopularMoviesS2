@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -9,8 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:gravity="center_vertical">
+    android:paddingEnd="@dimen/activity_horizontal_margin">
 
     <ImageView
         android:id="@+id/iv_trailer_thumb"
@@ -25,7 +23,6 @@
         android:textAppearance="?android:textAppearanceMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="222"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/iv_trailer_thumb"
         android:layout_toEndOf="@+id/iv_trailer_thumb"
@@ -36,7 +33,6 @@
         android:id="@+id/tv_type_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="112"
         android:layout_below="@+id/tv_name"
         android:layout_toRightOf="@+id/iv_trailer_thumb"
         android:layout_toEndOf="@+id/iv_trailer_thumb"

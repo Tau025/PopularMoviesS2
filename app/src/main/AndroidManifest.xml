@@ -69,7 +69,7 @@
             android:exported="false"/>
 
         <service
-            android:name=".services.TrailersDownloaderService"
+            android:name=".services.DownloaderService"
             android:exported="false"/>
     </application>
 </manifest>

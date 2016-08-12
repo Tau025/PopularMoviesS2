@@ -19,4 +19,5 @@
     <string name="sort_order_top_rated">Высший рейтинг</string>
     <string name="sort_order_favorite">Любимые</string>
     <string name="online_msg">В сети!</string>
+    <string name="reviews">Рецензии</string>
 </resources>

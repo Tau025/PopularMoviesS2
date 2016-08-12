@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import com.devtau.popularmoviess2.model.Movie;
+import com.devtau.popularmoviess2.model.Review;
 import com.devtau.popularmoviess2.model.SortBy;
 import com.devtau.popularmoviess2.model.Trailer;
 import org.json.JSONArray;
@@ -241,8 +242,8 @@ public class NetworkHelper {
         }
     }
 
-    //Метод распарсит JSON строку и вернет List трейлеров, перечисленных в предоставленной JSON строке
-    //Parses JSON string to a List of Trailers stated in provided string
+    //Метод распарсит JSON строку и вернет ArrayList трейлеров, перечисленных в предоставленной JSON строке
+    //Parses JSON string to a ArrayList of Trailers stated in provided string
     @Nullable
     public static ArrayList<Trailer> parseTrailersListJSON(String JSONString) {
         try {
@@ -263,6 +264,32 @@ public class NetworkHelper {
                 trailersList.add(parsedTrailer);
             }
             return trailersList;
+        } catch (JSONException e) {
+            Logger.e(LOG_TAG, "While parsing JSON");
+            return null;
+        }
+    }
+
+    //Метод распарсит JSON строку и вернет ArrayList рецензий, перечисленных в предоставленной JSON строке
+    //Parses JSON string to a ArrayList of Review stated in provided string
+    @Nullable
+    public static ArrayList<Review> parseReviewsListJSON(String JSONString) {
+        try {
+            JSONObject serverAnswer = new JSONObject(JSONString);
+            JSONArray reviewsJSONArray = serverAnswer.getJSONArray(Constants.JSON_RESULTS);
+
+            ArrayList<Review> reviewsList = new ArrayList<>();
+            for (int i = 0; i < reviewsJSONArray.length(); i++) {
+                JSONObject JSONReview = reviewsJSONArray.getJSONObject(i);
+                String userName = JSONReview.getString(Constants.JSON_REVIEW_AUTHOR);
+                String reviewContent = JSONReview.getString(Constants.JSON_REVIEW_CONTENT);
+
+                //Соберем из всех подготовленных компонентов объект класса Review
+                //Create a Review from all fields that we have now
+                Review parsedReview = new Review(userName, reviewContent);
+                reviewsList.add(parsedReview);
+            }
+            return reviewsList;
         } catch (JSONException e) {
             Logger.e(LOG_TAG, "While parsing JSON");
             return null;

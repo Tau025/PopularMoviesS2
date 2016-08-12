@@ -7,15 +7,17 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
+import com.devtau.popularmoviess2.fragments.ReviewsFragment;
 import com.devtau.popularmoviess2.model.Movie;
 import com.devtau.popularmoviess2.model.Trailer;
-import com.devtau.popularmoviess2.services.TrailersDownloaderService;
+import com.devtau.popularmoviess2.services.DownloaderService;
 import com.devtau.popularmoviess2.utility.Constants;
 import com.devtau.popularmoviess2.utility.Logger;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
@@ -31,22 +33,22 @@ public class MovieDetailsPresenter implements
     private MovieDetailsViewInterface view;
     private Movie movie;
     private long movieId;
-    private BroadcastReceiver myBroadCastReceiver;
+    private BroadcastReceiver myBroadcastReceiver;
 
-    public MovieDetailsPresenter(final MovieDetailsViewInterface view, long movieId) {
+    public MovieDetailsPresenter(MovieDetailsViewInterface view, long movieId) {
         this.view = view;
         this.movieId = movieId;
-        myBroadCastReceiver = initBroadCastReceiver();
+        myBroadcastReceiver = initBroadcastReceiver();
     }
 
-    private BroadcastReceiver initBroadCastReceiver() {
+    private BroadcastReceiver initBroadcastReceiver() {
         return new BroadcastReceiver(){
             @Override
             public void onReceive(Context context, Intent intent) {
                 //На выполнение всего метода у нас есть 10 секунд, иначе появится ANR
                 //To finish all operations in this method we have 10 seconds before ANR
-                if(intent.getAction() == null && Constants.MY_BROADCAST_ACTION.equals(intent.getAction())
-                        && intent.hasExtra(Intent.EXTRA_TEXT)) return;
+                if(intent.getAction() == null || !Constants.MY_BROADCAST_ACTION.equals(intent.getAction())
+                        || !intent.hasExtra(Constants.TRAILERS_LIST_EXTRA)) return;
                 ArrayList<Trailer> trailersList = intent.getParcelableArrayListExtra(Constants.TRAILERS_LIST_EXTRA);
                 view.populateTrailersList(trailersList);
             }
@@ -61,18 +63,18 @@ public class MovieDetailsPresenter implements
     }
 
     public void downloadTrailers() {
-        TrailersDownloaderService.downloadTrailers(view.getContext(), movieId);
+        DownloaderService.download(view.getContext(), movieId, DownloaderService.ACTION_DOWNLOAD_TRAILERS);
         registerBroadCastReceiver();
     }
 
     public void registerBroadCastReceiver() {
         //возобновим регистрацию широковещательного приёмника всякий раз при разворачивании приложения
-        view.getContext().registerReceiver(myBroadCastReceiver, new IntentFilter(Constants.MY_BROADCAST_ACTION));
+        view.getContext().registerReceiver(myBroadcastReceiver, new IntentFilter(Constants.MY_BROADCAST_ACTION));
     }
 
     public void unregisterBroadCastReceiver() {
         //отменим регистрацию широковещательного приёмника всякий раз при сворачивании приложения
-        view.getContext().unregisterReceiver(myBroadCastReceiver);
+        view.getContext().unregisterReceiver(myBroadcastReceiver);
     }
 
     public void onFavoriteClick() {
@@ -85,6 +87,12 @@ public class MovieDetailsPresenter implements
         view.getContext().getContentResolver().update(MoviesTable.CONTENT_URI,
                 MoviesTable.getContentValues(movie),
                 BaseColumns._ID + "=?", new String[]{String.valueOf(movieId)});
+    }
+
+    public void onReviewsClick(FragmentManager fragmentManager) {
+        ReviewsFragment reviewsFragment = ReviewsFragment.newInstance(movieId);
+        fragmentManager.beginTransaction().addToBackStack(null)
+                .replace(R.id.movie_details_container, reviewsFragment).commit();
     }
 
 

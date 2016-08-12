@@ -1,15 +1,12 @@
 package com.devtau.popularmoviess2.view;
 
-import android.database.Cursor;
+import com.devtau.popularmoviess2.model.Review;
+import java.util.ArrayList;
 /**
  * Вью-интерфейс, обеспечивающий общение презентера с пользователем
  * View interface to communicate with user
  */
-public interface MoviesListViewInterface extends View {
-    boolean showNoInternetDF();
-    boolean showProgressBarDF();
-    boolean dismissProgressBarDF();
-    void initList();
+public interface ReviewsListViewInterface extends View {
+    void populateList(ArrayList<Review> reviewsList);
     void showMessage(String msg);
-    void swapCursor(Cursor cursor);
 }
