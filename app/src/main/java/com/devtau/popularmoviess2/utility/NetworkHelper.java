@@ -216,13 +216,13 @@ public class NetworkHelper {
                 long movieID = JSONMovie.getLong(Constants.JSON_ID);
                 String movieTitle = JSONMovie.getString(Constants.JSON_TITLE);
                 String moviePosterPath = JSONMovie.getString(Constants.JSON_POSTER_PATH);
+                Calendar moviePosterCacheDate = Calendar.getInstance();
                 String moviePlotSynopsis = JSONMovie.getString(Constants.JSON_PLOT_SYNOPSIS);
                 double movieUserRating = JSONMovie.getDouble(Constants.JSON_USER_RATING);
                 double moviePopularity = JSONMovie.getDouble(Constants.JSON_POPULARITY);
 
-                Calendar movieReleaseDate = new GregorianCalendar();
+                Calendar movieReleaseDate = new GregorianCalendar(1970, 0, 1);
                 try {
-                    movieReleaseDate = new GregorianCalendar(1970, 0, 1);
                     String dateString = JSONMovie.getString(Constants.JSON_RELEASE_DATE);
                     movieReleaseDate.setTime(Utility.theMovieDBDateFormat.parse(dateString));
                 } catch (ParseException e) {
@@ -231,7 +231,7 @@ public class NetworkHelper {
 
                 //Соберем из всех подготовленных компонентов объект класса Movie
                 //Create a Movie from all fields that we have now
-                Movie parsedMovie = new Movie(movieID, movieTitle, moviePosterPath,
+                Movie parsedMovie = new Movie(movieID, movieTitle, moviePosterPath, moviePosterCacheDate,
                         moviePlotSynopsis, movieUserRating, moviePopularity, movieReleaseDate);
                 moviesList.add(parsedMovie);
             }

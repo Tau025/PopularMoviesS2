@@ -5,6 +5,8 @@ import com.devtau.popularmoviess2.model.SortBy;
 public abstract class Constants {
     public static final String IMAGE_STORAGE_ON_SERVER_BASE_URL = "http://image.tmdb.org/t/p/";
     //    posterSize: "w92", "w154", "w185", "w342", "w500", "w780", or "original"
+    //Nexus 4 с экраном 768*1280 обладает пиксельной плотностью 2.0 и w400 будет картинкой пиксель-в-пиксель
+    //Nexus 4 with it's 768*1280 screen has screen density of 2.0 and w400 would be pixel-perfect
     public static final String POSTER_SIZE = "w500";
     public static final SortBy DEFAULT_SORT_BY = SortBy.MOST_POPULAR;
     public static final String MY_BROADCAST_ACTION = "com.devtau.popularmoviess2.SENT_BROADCAST";

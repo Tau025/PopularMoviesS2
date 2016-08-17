@@ -53,7 +53,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         String jsonStringPopular = NetworkHelper.requestJSONStringFromServer(moviesListEndpointPopular);
-        Logger.v(LOG_TAG, "jsonString: " + String.valueOf(jsonStringPopular));
+        Logger.v(LOG_TAG, "jsonStringPopular: " + String.valueOf(jsonStringPopular));
         if (TextUtils.isEmpty(jsonStringPopular) || "".equals(jsonStringPopular)) {
             Logger.e(LOG_TAG, "Can't parse not valid jsonString");
             return;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.services.ImageDownloaderService;
@@ -16,6 +17,7 @@ public abstract class Utility {
     private static final String LOG_TAG = Utility.class.getSimpleName();
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public static final SimpleDateFormat theMovieDBDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private static int posterWidthSP, posterHeightSP;
 
     //Использовать библиотеку Picasso было бы слишком просто
     //Picasso is too easy
@@ -39,7 +41,7 @@ public abstract class Utility {
         //Проверим, нет ли сохраненной фотографии на устройстве
         //Check for a cached image on the device
         File cachedImage = FileManager.getImageFromCache(imageView.getContext(), posterPath);
-//        Logger.v(LOG_TAG, "In setPosterImage(). cachedImage is " + ((cachedImage != null) ? "valid" : "null"));
+        Logger.v(LOG_TAG, "In setPosterImage(). cachedImage is " + ((cachedImage != null) ? "valid" : "null"));
 
         if(cachedImage != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(cachedImage.getAbsolutePath());
@@ -49,5 +51,24 @@ public abstract class Utility {
             //Launch image downloader only if there is no cached image
             ImageDownloaderService.downloadImage(imageView.getContext(), posterPath);
         }
+    }
+
+
+    public static int[] getPosterWidthAndHeight(Context context) {
+        if(posterWidthSP != 0 && posterHeightSP != 0) {
+            return new int[]{posterWidthSP, posterHeightSP};
+        }
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+//        Logger.v(LOG_TAG, "metrics.density: " + String.valueOf(metrics.density));
+//        Logger.v(LOG_TAG, "metrics.widthPixels: " + String.valueOf(metrics.widthPixels));
+//        Logger.v(LOG_TAG, "metrics.heightPixels: " + String.valueOf(metrics.heightPixels));
+        int longestScreenSideDP = (int) (Math.max(metrics.widthPixels, metrics.heightPixels) / metrics.density);
+        if(longestScreenSideDP / 6 > 200) {
+            posterWidthSP = (int) (longestScreenSideDP / 6 * metrics.density);
+        } else {
+            posterWidthSP = (int) (200 * metrics.density);
+        }
+        posterHeightSP = posterWidthSP / 2 * 3;
+        return new int[]{posterWidthSP, posterHeightSP};
     }
 }

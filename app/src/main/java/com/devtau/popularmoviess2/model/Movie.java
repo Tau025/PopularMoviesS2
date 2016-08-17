@@ -3,8 +3,6 @@ package com.devtau.popularmoviess2.model;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import com.devtau.popularmoviess2.utility.Logger;
-import com.devtau.popularmoviess2.utility.Utility;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import static com.devtau.popularmoviess2.database.MoviesTable.*;
@@ -17,6 +15,7 @@ public class Movie {
     private long id;
     private String title;
     private String posterPath;
+    private Calendar posterCacheDate = Calendar.getInstance();
     private String plotSynopsis;
     private double userRating;
     private double popularity;
@@ -24,11 +23,12 @@ public class Movie {
     private boolean isFavorite;
 
 
-    public Movie(long id, String title, String posterPath, String plotSynopsis,
+    public Movie(long id, String title, String posterPath, Calendar posterCacheDate, String plotSynopsis,
                  double userRating, double popularity, Calendar releaseDate) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
+        this.posterCacheDate = posterCacheDate;
         this.plotSynopsis = plotSynopsis;
         this.userRating = userRating;
         this.popularity = popularity;
@@ -39,21 +39,19 @@ public class Movie {
         id = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
         title = cursor.getString(cursor.getColumnIndex(TITLE));
         posterPath = cursor.getString(cursor.getColumnIndex(POSTER_PATH));
+        posterCacheDate.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(POSTER_CACHE_DATE)));
         plotSynopsis = cursor.getString(cursor.getColumnIndex(PLOT_SYNOPSIS));
         userRating = cursor.getDouble(cursor.getColumnIndex(USER_RATING));
         popularity = cursor.getDouble(cursor.getColumnIndex(POPULARITY));
-        try {
-            releaseDate = new GregorianCalendar(1970, 0, 1);
-            String dateString = cursor.getString(cursor.getColumnIndex(RELEASE_DATE));
-            releaseDate.setTime(Utility.dateFormat.parse(dateString));
-        } catch (ParseException e) {
-            Logger.e(LOG_TAG, "while parsing releaseDate from Cursor", e);
-            e.printStackTrace();
-        }
+        releaseDate.setTimeInMillis(cursor.getLong(cursor.getColumnIndex(RELEASE_DATE)));
         isFavorite = (cursor.getInt(cursor.getColumnIndex(IS_FAVORITE)) == 1);
     }
 
     //setter
+    public void setPosterCacheDate(Calendar posterCacheDate) {
+        this.posterCacheDate = posterCacheDate;
+    }
+
     public void setIsFavorite(boolean favorite) {
         isFavorite = favorite;
         Logger.d(LOG_TAG, "isFavorite: " + String.valueOf(isFavorite));
@@ -71,6 +69,10 @@ public class Movie {
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public Calendar getPosterCacheDate() {
+        return posterCacheDate;
     }
 
     public String getPlotSynopsis() {
@@ -95,53 +97,55 @@ public class Movie {
 
     public String getReleaseYear() {
         Calendar defaultDate = new GregorianCalendar(1970, 0, 1);
-        if(getReleaseDate().compareTo(defaultDate) == 0) {
+        if(releaseDate.compareTo(defaultDate) == 0) {
             return "---";
         } else {
-            return String.valueOf(getReleaseDate().get(Calendar.YEAR));
+            return String.valueOf(releaseDate.get(Calendar.YEAR));
         }
     }
 
     public void updateFields(Movie movie) {
         if(movie != null) {
             int fieldsUpdated = 0;
-            if(!"".equals(movie.getTitle())) {
-                title = movie.getTitle();
+            if(!"".equals(movie.title)) {
+                title = movie.title;
                 fieldsUpdated++;
             }
-            if(!"".equals(movie.getPosterPath())) {
-                posterPath = movie.getPosterPath();
+            if(!"".equals(movie.posterPath)) {
+                posterPath = movie.posterPath;
                 fieldsUpdated++;
             }
-            if(!"".equals(movie.getPlotSynopsis())) {
-                plotSynopsis = movie.getPlotSynopsis();
+            if(!"".equals(movie.plotSynopsis)) {
+                plotSynopsis = movie.plotSynopsis;
                 fieldsUpdated++;
             }
-            if(0 != movie.getUserRating()) {
-                userRating = movie.getUserRating();
+            if(0 != movie.userRating) {
+                userRating = movie.userRating;
                 fieldsUpdated++;
             }
-            if(0 != movie.getPopularity()) {
-                popularity = movie.getPopularity();
+            if(0 != movie.popularity) {
+                popularity = movie.popularity;
                 fieldsUpdated++;
             }
-            if(null != movie.getReleaseDate()) {
-                releaseDate = movie.getReleaseDate();
+            if(null != movie.releaseDate) {
+                releaseDate = movie.releaseDate;
                 fieldsUpdated++;
             }
-            //Мы не хотим обновлять поле isFavorite, т.к. оно не имеет отношения к базе на сервере
-            //и каждый раз при синхронизации с сервера будет приходить фильм с таким же id? но без
-            //поля isFavorite. Следовательно оно будет сбрасываться, а мы этого не хотим.
-            //We don't want to update isFavorite field because if we do, SyncAdapter would erase
-            //saved isFavorite state every time it syncs with server.
-            Logger.v(LOG_TAG, "updateFields() finished. fieldsUpdated: " + String.valueOf(fieldsUpdated));
+            //Мы не хотим обновлять поля isFavorite и posterCacheDate, т.к. они не имеют отношения
+            //к базе на сервере и каждый раз при синхронизации с сервера будет приходить фильм
+            //с таким же id, но этих полей. Следовательно они будут сбрасываться, а мы этого не хотим.
+            //We don't want to update isFavorite & posterCacheDate fields because if we do,
+            //SyncAdapter would erase saved isFavorite state every time it syncs with server.
+            if(fieldsUpdated < 6) {
+                Logger.d(LOG_TAG, "updateFields() finished. fieldsUpdated: " + String.valueOf(fieldsUpdated));
+            }
         } else {
             Logger.e(LOG_TAG, "updateFields() cannot receive null movie");
         }
     }
 
     public String getFormattedUserRating() {
-        return String.valueOf(userRating) + '/' + 10;
+        return String.valueOf(userRating) + " / " + 10;
     }
 
 

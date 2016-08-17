@@ -16,8 +16,8 @@ import java.util.ArrayList;
  * Service for asynchronous downloading trailers or reviews list from server
  */
 public class DownloaderService extends IntentService {
-    public static final String ACTION_DOWNLOAD_TRAILERS = "com.devtau.popularmoviess2.utility.action.DOWNLOAD_TRAILERS";
-    public static final String ACTION_DOWNLOAD_REVIEWS = "com.devtau.popularmoviess2.utility.action.DOWNLOAD_REVIEWS";
+    public static final String ACTION_DOWNLOAD_TRAILERS = "com.devtau.popularmoviess2.services.action.DOWNLOAD_TRAILERS";
+    public static final String ACTION_DOWNLOAD_REVIEWS = "com.devtau.popularmoviess2.services.action.DOWNLOAD_REVIEWS";
     private static final String LOG_TAG = DownloaderService.class.getSimpleName();
 
     public DownloaderService() {

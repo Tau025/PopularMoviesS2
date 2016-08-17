@@ -2,6 +2,7 @@ package com.devtau.popularmoviess2.utility;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,11 +34,12 @@ public class FileManager {
             //Создадим новый файл для картинки
             //Create new file for our image
             File file = new File(appDir, getImageFileName(posterPath));
-//            Logger.d(LOG_TAG, "Creating new file at: " + String.valueOf(file.getAbsolutePath()));
+            Logger.d(LOG_TAG, "Creating new file at: " + String.valueOf(file.getAbsolutePath()));
             outputStream = new FileOutputStream(file);
 
             //Сожмем картинку и сохраним ее в созданный выше файл
             //Compress our image and save it to earlier created file
+            bitmap = resizeBitmapToExactWidthAndHeight(bitmap, context);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();
             killFileWithDelay(file);
@@ -53,6 +55,38 @@ public class FileManager {
                 Logger.e(LOG_TAG, "Error while closing outputStream", e);
             }
         }
+    }
+
+    private static Bitmap resizeBitmapToExactWidthAndHeight(Bitmap bitmap, Context context) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+//        Logger.v(LOG_TAG, "old w*h: " + String.valueOf(width)+ "*" + String.valueOf(height));
+        int newWidthSP = Utility.getPosterWidthAndHeight(context)[0];
+        int newHeightSP = Utility.getPosterWidthAndHeight(context)[1];
+
+        float scaleWidth = ((float) newWidthSP) / width;
+        float scaleHeight = ((float) newHeightSP) / height;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+        bitmap.recycle();
+//        Logger.v(LOG_TAG, "new w*h: " + String.valueOf(resizedBitmap.getWidth())+ "*" +
+//                String.valueOf(resizedBitmap.getHeight()));
+        return resizedBitmap;
+    }
+
+    private static Bitmap resizeBitmapKeepingAspectRatio(Bitmap bitmap, int maxWidth, int maxHeight) {
+        float scale = Math.min(((float)maxHeight / bitmap.getWidth()),
+                ((float)maxWidth / bitmap.getHeight()));
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        bitmap.recycle();
+        return resizedBitmap;
     }
 
     @NonNull

@@ -17,8 +17,8 @@ import java.net.URL;
  * Service for asynchronous downloading images from server to the device cache
  */
 public class ImageDownloaderService extends IntentService {
-    private static final String ACTION_DOWNLOAD_IMAGE = "com.devtau.popularmoviess2.utility.action.DOWNLOAD_IMAGE";
-    private static final String EXTRA_POSTER_PATH = "com.devtau.popularmoviess2.utility.extra.POSTER_PATH";
+    private static final String ACTION_DOWNLOAD_IMAGE = "com.devtau.popularmoviess2.services.action.DOWNLOAD_IMAGE";
+    private static final String EXTRA_POSTER_PATH = "com.devtau.popularmoviess2.services.extra.POSTER_PATH";
     private static final String LOG_TAG = ImageDownloaderService.class.getSimpleName();
 
     public ImageDownloaderService() {

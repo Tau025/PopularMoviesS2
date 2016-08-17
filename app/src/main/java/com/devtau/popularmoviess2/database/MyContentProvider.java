@@ -68,7 +68,7 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        Logger.d(LOG_TAG, "In insert(). uri is: " + String.valueOf(uri));
+//        Logger.d(LOG_TAG, "In insert(). uri is: " + String.valueOf(uri));
 
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
@@ -94,7 +94,7 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        Logger.v(LOG_TAG, "query(). uri: " + String.valueOf(uri));
+//        Logger.v(LOG_TAG, "query(). uri: " + String.valueOf(uri));
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
 
