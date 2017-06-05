@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
-import com.devtau.popularmoviess2.utility.Utility;
+import com.devtau.popularmoviess2.util.AppUtils;
 /**
  * Адаптер списка фильмов
  * Adapter for a list of movies
@@ -32,7 +32,7 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
     @Override
     public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
         String posterPath = cursor.getString(cursor.getColumnIndex(MoviesTable.POSTER_PATH));
-        Utility.setPosterImage(holder.movieThumb, posterPath);
+        AppUtils.setPosterImage(holder.movieThumb, posterPath);
     }
 
     @Override

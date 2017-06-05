@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.model.Trailer;
-import com.devtau.popularmoviess2.utility.Constants;
+import com.devtau.popularmoviess2.util.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

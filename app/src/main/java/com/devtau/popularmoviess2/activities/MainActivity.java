@@ -17,6 +17,7 @@ import com.devtau.popularmoviess2.fragments.NoInternetDF;
 import com.devtau.popularmoviess2.fragments.ProgressBarDF;
 import com.devtau.popularmoviess2.model.SortBy;
 import com.devtau.popularmoviess2.presenters.MoviesListPresenter;
+import com.devtau.popularmoviess2.util.AppUtils;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 import com.devtau.popularmoviess2.adapters.SortBySpinnerAdapter;
 import java.util.ArrayList;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements
         presenter = new MoviesListPresenter(this);
         presenter.sendRequestToServer();
         presenter.restartLoader();
+
+        AppUtils.logCurrentDisplayWidth(this);
     }
 
 

@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Logger;
 /**
  * Фрагмент чтобы показать пользователю, что приложение делает важную работу
  * Fragment shows to user that app is now busy doing important background work

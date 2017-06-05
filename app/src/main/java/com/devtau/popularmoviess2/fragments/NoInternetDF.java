@@ -8,7 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Logger;
 /**
  * Этот диалог показываем пользователю, когда подключения к интернету нет.
  * Пользователь может включить сеть и повторить попытку подключения.

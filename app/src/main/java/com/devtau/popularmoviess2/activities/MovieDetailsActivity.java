@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.R;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
 /**
  * Активность, содержащая контейнер для фрагмента {@link MovieDetailsFragment}
  * Используется только если места на экране устройства недостаточно чтобы показать подробности

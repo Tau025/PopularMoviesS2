@@ -12,8 +12,8 @@ import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.adapters.ReviewsRecyclerViewAdapter;
 import com.devtau.popularmoviess2.model.Review;
 import com.devtau.popularmoviess2.presenters.ReviewsListPresenter;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
 import com.devtau.popularmoviess2.view.ReviewsListViewInterface;
 import java.util.ArrayList;
 /**

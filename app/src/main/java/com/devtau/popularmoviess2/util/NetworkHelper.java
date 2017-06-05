@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.utility;
+package com.devtau.popularmoviess2.util;
 
 import android.content.Context;
 import android.net.Uri;
@@ -224,7 +224,7 @@ public class NetworkHelper {
                 Calendar movieReleaseDate = new GregorianCalendar(1970, 0, 1);
                 try {
                     String dateString = JSONMovie.getString(Constants.JSON_RELEASE_DATE);
-                    movieReleaseDate.setTime(Utility.theMovieDBDateFormat.parse(dateString));
+                    movieReleaseDate.setTime(AppUtils.theMovieDBDateFormat.parse(dateString));
                 } catch (ParseException e) {
                     Logger.e(LOG_TAG, "while parsing releaseDate from JSON", e);
                 }

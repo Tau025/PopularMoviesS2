@@ -20,9 +20,9 @@ import com.devtau.popularmoviess2.database.MoviesTable;
 import com.devtau.popularmoviess2.database.MySQLHelper;
 import com.devtau.popularmoviess2.model.Movie;
 import com.devtau.popularmoviess2.model.SortBy;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
-import com.devtau.popularmoviess2.utility.NetworkHelper;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
+import com.devtau.popularmoviess2.util.NetworkHelper;
 import java.net.URL;
 import java.util.List;
 /**

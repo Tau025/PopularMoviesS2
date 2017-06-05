@@ -21,10 +21,10 @@ import com.devtau.popularmoviess2.adapters.TrailersListAdapter;
 import com.devtau.popularmoviess2.model.Movie;
 import com.devtau.popularmoviess2.model.Trailer;
 import com.devtau.popularmoviess2.presenters.MovieDetailsPresenter;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
-import com.devtau.popularmoviess2.utility.NetworkHelper;
-import com.devtau.popularmoviess2.utility.Utility;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
+import com.devtau.popularmoviess2.util.NetworkHelper;
+import com.devtau.popularmoviess2.util.AppUtils;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
 import java.util.ArrayList;
 /**
@@ -125,7 +125,7 @@ public class MovieDetailsFragment extends Fragment implements
         tv_release_date.setText(movie.getReleaseYear());
         tv_user_rating.setText(movie.getFormattedUserRating());
         tv_plot_synopsis.setText(movie.getPlotSynopsis());
-        Utility.setPosterImage(iv_poster, movie.getPosterPath());
+        AppUtils.setPosterImage(iv_poster, movie.getPosterPath());
         btn_is_favorite.setChecked(movie.isFavorite());
     }
 

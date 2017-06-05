@@ -21,8 +21,8 @@ import com.devtau.popularmoviess2.fragments.MovieDetailsFragment;
 import com.devtau.popularmoviess2.fragments.NoInternetDF;
 import com.devtau.popularmoviess2.model.SortBy;
 import com.devtau.popularmoviess2.sync.SyncAdapter;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
 import com.devtau.popularmoviess2.view.MoviesListViewInterface;
 /**
  * Презентер, показывающий список фильмов

@@ -1,10 +1,12 @@
-package com.devtau.popularmoviess2.utility;
+package com.devtau.popularmoviess2.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.ImageView;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.services.ImageDownloaderService;
@@ -13,11 +15,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public abstract class Utility {
-    private static final String LOG_TAG = Utility.class.getSimpleName();
+public abstract class AppUtils {
+
+    private static final String LOG_TAG = AppUtils.class.getSimpleName();
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public static final SimpleDateFormat theMovieDBDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     private static int posterWidthSP, posterHeightSP;
+
 
     //Использовать библиотеку Picasso было бы слишком просто
     //Picasso is too easy
@@ -70,5 +74,11 @@ public abstract class Utility {
         }
         posterHeightSP = posterWidthSP / 2 * 3;
         return new int[]{posterWidthSP, posterHeightSP};
+    }
+
+    public static void logCurrentDisplayWidth(Activity activity) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        Log.d(LOG_TAG, "current display width: " + (metrics.widthPixels / metrics.density));
     }
 }

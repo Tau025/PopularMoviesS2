@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import com.devtau.popularmoviess2.model.Review;
 import com.devtau.popularmoviess2.services.DownloaderService;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
 import com.devtau.popularmoviess2.view.ReviewsListViewInterface;
 import java.util.ArrayList;
 /**

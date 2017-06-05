@@ -18,8 +18,8 @@ import com.devtau.popularmoviess2.fragments.ReviewsFragment;
 import com.devtau.popularmoviess2.model.Movie;
 import com.devtau.popularmoviess2.model.Trailer;
 import com.devtau.popularmoviess2.services.DownloaderService;
-import com.devtau.popularmoviess2.utility.Constants;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Constants;
+import com.devtau.popularmoviess2.util.Logger;
 import com.devtau.popularmoviess2.view.MovieDetailsViewInterface;
 import java.util.ArrayList;
 /**

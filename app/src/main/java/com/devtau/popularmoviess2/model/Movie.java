@@ -2,7 +2,7 @@ package com.devtau.popularmoviess2.model;
 
 import android.database.Cursor;
 import android.provider.BaseColumns;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Logger;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import static com.devtau.popularmoviess2.database.MoviesTable.*;

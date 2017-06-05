@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.utility;
+package com.devtau.popularmoviess2.util;
 
 import com.devtau.popularmoviess2.model.SortBy;
 

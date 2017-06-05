@@ -1,4 +1,4 @@
-package com.devtau.popularmoviess2.utility;
+package com.devtau.popularmoviess2.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -61,8 +61,8 @@ public class FileManager {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 //        Logger.v(LOG_TAG, "old w*h: " + String.valueOf(width)+ "*" + String.valueOf(height));
-        int newWidthSP = Utility.getPosterWidthAndHeight(context)[0];
-        int newHeightSP = Utility.getPosterWidthAndHeight(context)[1];
+        int newWidthSP = AppUtils.getPosterWidthAndHeight(context)[0];
+        int newHeightSP = AppUtils.getPosterWidthAndHeight(context)[1];
 
         float scaleWidth = ((float) newWidthSP) / width;
         float scaleHeight = ((float) newHeightSP) / height;

@@ -3,7 +3,7 @@ package com.devtau.popularmoviess2.sync;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import com.devtau.popularmoviess2.utility.Logger;
+import com.devtau.popularmoviess2.util.Logger;
 /**
  * Служба, на которой крутится наш SyncAdapter
  * Service to run our SyncAdapter on

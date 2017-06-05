@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import com.devtau.popularmoviess2.R;
 import com.devtau.popularmoviess2.database.MoviesTable;
-import com.devtau.popularmoviess2.utility.Constants;
+import com.devtau.popularmoviess2.util.Constants;
 import java.util.ArrayList;
 /**
  * Перечисление для вариантов сортировки списка фильмов
