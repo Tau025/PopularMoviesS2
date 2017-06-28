@@ -9,9 +9,23 @@ import android.support.v7.widget.RecyclerView;
  */
 public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
+    
+    public static final int TYPE_HEADER = 1586;
+    static final int TYPE_REGULAR_ITEM = 1587;
+    static final int TYPE_FOOTER = 1588;
+    public static final String LOG_TAG = "CursorRVAdapter";
     private Cursor cursor;
-
-    public void swapCursor(final Cursor cursor) {
+    
+    
+    RecyclerViewCursorAdapter() {
+    }
+    
+    RecyclerViewCursorAdapter(Cursor cursor) {
+        this.cursor = cursor;
+    }
+    
+    
+    public void swapCursor(Cursor cursor) {
         this.cursor = cursor;
         notifyDataSetChanged();
     }
@@ -39,8 +53,8 @@ public abstract class RecyclerViewCursorAdapter<VH extends RecyclerView.ViewHold
     @Override
     public final void onBindViewHolder(VH holder, int position) {
         Cursor cursor = getItem(position);
-        onBindViewHolder(holder, cursor);
+        onBindViewHolderCursor(holder, cursor, position);
     }
 
-    public abstract void onBindViewHolder(VH holder, Cursor cursor);
+    public abstract void onBindViewHolderCursor(VH holder, Cursor cursor, int position);
 }

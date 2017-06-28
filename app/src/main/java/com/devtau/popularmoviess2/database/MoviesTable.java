@@ -29,13 +29,10 @@ public abstract class MoviesTable {
             + RELEASE_DATE + " INTEGER NOT NULL, "
             + IS_FAVORITE + " INTEGER NOT NULL";
 
-    public static final Uri CONTENT_URI =
-            MySQLHelper.BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();
+    public static final Uri CONTENT_URI = MySQLHelper.BASE_CONTENT_URI.buildUpon().appendPath(TABLE_NAME).build();
 
-    public static final String CONTENT_TYPE =
-            ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + MySQLHelper.CONTENT_AUTHORITY + "/" + TABLE_NAME;
-    public static final String CONTENT_ITEM_TYPE =
-            ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + MySQLHelper.CONTENT_AUTHORITY + "/" + TABLE_NAME;
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + MySQLHelper.CONTENT_AUTHORITY + "/" + TABLE_NAME;
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + MySQLHelper.CONTENT_AUTHORITY + "/" + TABLE_NAME;
     private static final String LOG_TAG = MoviesTable.class.getSimpleName();
 
     public static Uri buildMovieUri(long id) {

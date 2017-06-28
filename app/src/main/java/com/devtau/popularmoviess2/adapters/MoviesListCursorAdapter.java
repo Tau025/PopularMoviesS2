@@ -23,14 +23,14 @@ public class MoviesListCursorAdapter extends RecyclerViewCursorAdapter<MoviesLis
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_movies, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_movies, parent, false);
         view.setOnClickListener(this);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
+    public void onBindViewHolderCursor(ViewHolder holder, Cursor cursor, int position) {
+        cursor.moveToPosition(position);
         String posterPath = cursor.getString(cursor.getColumnIndex(MoviesTable.POSTER_PATH));
         AppUtils.setPosterImage(holder.movieThumb, posterPath);
     }

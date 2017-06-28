@@ -38,8 +38,8 @@
         </activity>
 
         <provider
-            android:name=".database.MyContentProvider"
-            android:authorities="com.devtau.popularmoviess2" />
+            android:name=".database.CustomContentProvider"
+            android:authorities="@string/content_authority" />
 
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.AuthenticatorService">

@@ -141,11 +141,9 @@ public class MoviesListPresenter implements
             case LOADER_RESULTS:
                 if(sortBy == SortBy.MOST_POPULAR || sortBy == SortBy.TOP_RATED) {
                     String sortOrder = sortBy.getDatabaseID() + " DESC LIMIT 20";
-                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI,
-                            null, null, null, sortOrder);
+                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI, null, null, null, sortOrder);
                 } else if(sortBy == SortBy.IS_FAVORITE) {
-                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI,
-                            null, MoviesTable.IS_FAVORITE + "=?", new String[]{"1"}, null);
+                    return new CursorLoader(view.getContext(), MoviesTable.CONTENT_URI, null, MoviesTable.IS_FAVORITE + "=?", new String[]{"1"}, null);
                 }
         }
         return null;

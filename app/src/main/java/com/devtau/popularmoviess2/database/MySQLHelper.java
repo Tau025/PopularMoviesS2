@@ -10,9 +10,10 @@ import com.devtau.popularmoviess2.util.Logger;
  * Helper is one no matter how much tables there are
  */
 public class MySQLHelper extends SQLiteOpenHelper {
+    
     public static final String DB_NAME = "PopularMoviesS2";
     private static final int DB_VERSION = 1;
-    private static final String LOG_TAG = MySQLHelper.class.getSimpleName();
+    private static final String LOG_TAG = "MySQLHelper";
     private static MySQLHelper instance;
     public static final String CREATE_TABLE = "CREATE TABLE %s (%s);";
     public static final String PRIMARY_KEY = BaseColumns._ID + " integer primary key autoincrement, ";
